@@ -1,12 +1,9 @@
-C:\Dev\Mendix\appmaisv2-feature_APP-425-encriptacao-de-senha\javasource\cryptography\actions\JS_PinblockEncodeDecodeAction copy.java:9: error: class JS_PinblockEncodeDecodeAction is public, should be declared in a file named JS_PinblockEncodeDecodeAction.java
-public class JS_PinblockEncodeDecodeAction extends CustomJavaAction<java.lang.Void> {
-       ^
-C:\Dev\Mendix\appmaisv2-feature_APP-425-encriptacao-de-senha\javasource\cryptography\actions\JS_PinblockEncodeDecodeAction.java:18: error: duplicate class: cryptography.actions.JS_PinblockEncodeDecodeAction
-public class JS_PinblockEncodeDecodeAction extends CustomJavaAction<java.lang.String>
-       ^
+C:\Dev\Mendix\appmaisv2-feature_APP-425-encriptacao-de-senha\javasource\cryptography\actions\JS_PinblockEncodeDecodeAction.java:48: error: missing return statement
+	}
+	^
 Note: Some input files use or override a deprecated API.
 Note: Recompile with -Xlint:deprecation for details.
-2 errors
+1 error
 
 FAILURE: Build failed with an exception.
 
@@ -21,5 +18,5 @@ Execution failed for task ':compile'.
 
 * Get more help at https://help.gradle.org
 
-BUILD FAILED in 12s
+BUILD FAILED in 21s
 
