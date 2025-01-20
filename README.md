@@ -5,137 +5,150 @@ import com.mendix.webui.CustomJavaAction;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.StringUtils;
-import cryptography.actions.JS_PinblockEncodeDecodeAction;
-import javax.crypto.spec.SecretKeySpec;
 import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
-public class JA_GeneratePinblock extends CustomJavaAction<java.lang.String> {
-    private java.lang.String key;
-    private java.lang.String pin;
-    private java.lang.String pan;
+public class JA_GeneratePinblock extends CustomJavaAction<java.lang.String>
+{
+	private java.lang.String key;
+	private java.lang.String pin;
+	private java.lang.String pan;
 
-    public JA_GeneratePinblock(IContext context, java.lang.String key, java.lang.String pin, java.lang.String pan) {
-        super(context);
-        this.key = key;
-        this.pin = pin;
-        this.pan = pan;
-    }
+	public JA_GeneratePinblock(IContext context, java.lang.String key, java.lang.String pin, java.lang.String pan)
+	{
+		super(context);
+		this.key = key;
+		this.pin = pin;
+		this.pan = pan;
+	}
 
-    @java.lang.Override
-    public java.lang.String executeAction() throws Exception {
-        // BEGIN USER CODE
+	@java.lang.Override
+	public java.lang.String executeAction() throws Exception
+	{
+		// BEGIN USER CODE
 
-        // Codificar o Pinblock
-        String iso9564format0 = format0Encode(pin, pan);
-        System.out.println("Pinblock Encoded: " + iso9564format0);
-        
-        // Decodificar o Pinblock
-        String pinDecoded = format0Decode(iso9564format0, pan);
-        System.out.println("Pin Decoded: " + pinDecoded);
+        TripleDes d = new TripleDes(this.pan, 4);
+        String result = d.encrypt(key, pin);
+        return result;
+		// END USER CODE
+	}
 
-        // Ajustar o tamanho da chave para 16 ou 24 bytes
-        if (key.length() > 24) {
-            key = key.substring(0, 24); // Truncar para 24 bytes
-        } else if (key.length() < 16) {
-            key = String.format("%-16s", key).replace(' ', '0'); // Preencher com zeros até 16 bytes
+	/**
+	 * Returns a string representation of this action
+	 * @return a string representation of this action
+	 */
+	@java.lang.Override
+	public java.lang.String toString()
+	{
+		return "JA_GeneratePinblock";
+	}
+
+	// BEGIN EXTRA CODE
+    public class TripleDes  {
+
+        private  final String ALGORITHM = "TripleDES";
+        private  final String MODE = "ECB";
+        private  final String PADDING = "NoPadding";
+
+        /** algorithm/mode/padding */
+        private  final String TRANSFORMATION = ALGORITHM+"/"+MODE+"/"+PADDING;
+
+        private final String key;
+        private int pinLength;
+
+        public TripleDes(String key, int pinLength) {
+            this.key = key;
+            this.pinLength = pinLength;
         }
 
-        // Converter a chave para bytes com a codificação UTF-8
-        byte[] secretKey = key.getBytes(StandardCharsets.UTF_8);
+        public String encrypt(String pan, String pinClear) throws Exception {
 
-        // Verificar o tamanho da chave
-        if (secretKey.length != 16 && secretKey.length != 24) {
-            throw new IllegalArgumentException("A chave para Triple DES deve ter 16 ou 24 bytes.");
+            if(pinClear.length() != pinLength) {
+                System.out.println("Incorrect PIN length given. Please fix! pinClear.size() " + "!= " + " pinLength : " + pinClear.length() + " !=" + pinLength);
+            }
+
+            String pinEncoded = encodePinBlockAsHex(pan, pinClear);
+            byte[] tmp = h2b(this.key);
+            byte[] key = new byte[24];
+            System.arraycopy(tmp, 0, key, 0, 16);
+            System.arraycopy(tmp, 0, key, 16, 8);
+            Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+            cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key, ALGORITHM));
+            byte[] plaintext = cipher.doFinal(h2b(pinEncoded));
+            return b2h(plaintext);
         }
 
-        // Criação do SecretKeySpec para Triple DES
-        SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey, "DESede");
+        public String decrypt(String pan, String encryptedPin) throws Exception {
+            byte[] tmp = h2b(this.key);
+            byte[] key = new byte[24];
+            System.arraycopy(tmp, 0, key, 0, 16);
+            System.arraycopy(tmp, 0, key, 16, 8);
+            Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+            cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key, ALGORITHM));
+            byte[] plaintext = cipher.doFinal(h2b(encryptedPin));
+            String pinEncoded = b2h(plaintext);
+            return decodePinBlock(pan, pinEncoded);
+        }
 
-        // Criação do Cipher para criptografia
-        Cipher encryptCipher = Cipher.getInstance("DESede/ECB/PKCS5Padding");
-        encryptCipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
+        public String decodePinBlock(String pan, String pinEncoded) throws Exception {
+            pan = pan.substring(pan.length() - 12 - 1, pan.length() - 1);
+            String paddingPAN = "0000".concat(pan);
+            byte[] pinBlock = xorBytes(h2b(paddingPAN), h2b(pinEncoded));
+            return b2h(pinBlock).substring(2, pinLength+2);
+        }
 
-        // Converter o Pinblock para bytes e realizar a criptografia
-        byte[] secretMessagesBytes = iso9564format0.getBytes(StandardCharsets.UTF_8);
-        byte[] encryptedMessageBytes = encryptCipher.doFinal(secretMessagesBytes);
+        public String encodePinBlockAsHex(String pan, String pin) throws Exception {
+            pan = pan.substring(pan.length() - 12 - 1, pan.length() - 1);
+            String paddingPAN = "0000".concat(pan);
 
-        // Retornar o texto criptografado em maiúsculas
-        return new String(encryptedMessageBytes).toUpperCase();
+            String Fs = "FFFFFFFFFFFFFFFF";
+            String paddingPIN = "0" + pin.length() + pin + Fs.substring(2 + pin.length(), Fs.length());
 
-        // END USER CODE
-    }
+            byte[] pinBlock = xorBytes(h2b(paddingPAN), h2b(paddingPIN));
 
-    @java.lang.Override
-    public java.lang.String toString() {
-        return "JA_GeneratePinblock";
-    }
+            return b2h(pinBlock);
+        }
 
-    // BEGIN EXTRA CODE
-    /**
-     * Encode pinblock format 0 (ISO 9564)
-     * @param pin pin 
-     * @param pan primary account number (PAN/CLN/CardNumber)
-     * @return pinblock in HEX format
-     */
-    public static String format0Encode(String pin, String pan) {
-        try {
-            final String pinLenHead = StringUtils.leftPad(Integer.toString(pin.length()), 2, '0')+pin;
-            final String pinData = StringUtils.rightPad(pinLenHead, 16, 'F');
-            final byte[] bPin = Hex.decodeHex(pinData.toCharArray());
-            final String panPart = extractPanAccountNumberPart(pan);
-            final String panData = StringUtils.leftPad(panPart, 16, '0');
-            final byte[] bPan = Hex.decodeHex(panData.toCharArray());
+        private byte[] xorBytes(byte[] a, byte[] b) throws Exception {
+            if (a.length != b.length) {
+                throw new Exception();
+            }
+            byte[] result = new byte[a.length];
+            for (int i = 0; i < a.length; i++) {
+                int r = 0;
+                r = a[i] ^ b[i];
+                r &= 0xFF;
+                result[i] = (byte) r;
+            }
+            return result;
+        }
 
-            final byte[] pinblock = new byte[8];
-            for (int i = 0; i < 8; i++)
-                pinblock[i] = (byte) (bPin[i] ^ bPan[i]);
+        private byte[] h2b(String hex) {
+            if ((hex.length() & 0x01) == 0x01)
+                throw new IllegalArgumentException();
+            byte[] bytes = new byte[hex.length() / 2];
+            for (int idx = 0; idx < bytes.length; ++idx) {
+                int hi = Character.digit((int) hex.charAt(idx * 2), 16);
+                int lo = Character.digit((int) hex.charAt(idx * 2 + 1), 16);
+                if ((hi < 0) || (lo < 0))
+                    throw new IllegalArgumentException();
+                bytes[idx] = (byte) ((hi << 4) | lo);
+            }
+            return bytes;
+        }
 
-            return Hex.encodeHexString(pinblock).toUpperCase();
-        } catch (DecoderException e) {
-            throw new RuntimeException("Hex decoder failed!", e);
+        private String b2h(byte[] bytes) {
+            char[] hex = new char[bytes.length * 2];
+            for (int idx = 0; idx < bytes.length; ++idx) {
+                int hi = (bytes[idx] & 0xF0) >>> 4;
+                int lo = (bytes[idx] & 0x0F);
+                hex[idx * 2] = (char) (hi < 10 ? '0' + hi : 'A' - 10 + hi);
+                hex[idx * 2 + 1] = (char) (lo < 10 ? '0' + lo : 'A' - 10 + lo);
+            }
+            return new String(hex);
         }
     }
-
-    /**
-     * @param accountNumber PAN - primary account number
-     * @return extract right-most 12 digits of the primary account number (PAN)
-     */
-    public static String extractPanAccountNumberPart(String accountNumber) {
-        String accountNumberPart = null;
-        if (accountNumber.length() > 12)
-            accountNumberPart = accountNumber.substring(accountNumber.length() - 13, accountNumber.length() - 1);
-        else
-            accountNumberPart = accountNumber;
-        return accountNumberPart;
-    }
-
-    /**
-     * Decode pinblock format 0 - ISO 9564
-     * @param pinblock pinblock in format 0 - ISO 9564 in HEX format 
-     * @param pan primary account number (PAN/CLN/CardNumber)
-     * @return clean PIN
-     */
-    public static String format0Decode(String pinblock, String pan) {
-        try {
-            final String panPart = extractPanAccountNumberPart(pan);
-            final String panData = StringUtils.leftPad(panPart, 16, '0');
-            final byte[] bPan = Hex.decodeHex(panData.toCharArray());
-            
-            final byte[] bPinBlock = Hex.decodeHex(pinblock.toCharArray());
-            
-            final byte[] bPin = new byte[8];
-            for (int i = 0; i < 8; i++)
-                bPin[i] = (byte) (bPinBlock[i] ^ bPan[i]);
-            
-            final String pinData = Hex.encodeHexString(bPin);
-            final int pinLen = Integer.parseInt(pinData.substring(0, 2));
-            return pinData.substring(2, 2 + pinLen);
-        } catch (NumberFormatException e) {
-            throw new RuntimeException("Invalid pinblock format!");
-        } catch (DecoderException e) {
-            throw new RuntimeException("Hex decoder failed!", e);
-        }
-    }
-    // END EXTRA CODE
+	// END EXTRA CODE
 }
