@@ -1,154 +1,126 @@
-package cryptography.actions;
+com.mendix.webui.WebUIException: Exception while executing runtime operation
+	at com.mendix.webui.actions.client.RuntimeOperationAction.$anonfun$apply$1(RuntimeOperationAction.scala:62)
 
-import com.mendix.systemwideinterfaces.core.IContext;
-import com.mendix.webui.CustomJavaAction;
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.lang.StringUtils;
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
+Caused by: com.mendix.modules.microflowengine.MicroflowException: com.mendix.systemwideinterfaces.MendixRuntimeException: java.lang.ArrayIndexOutOfBoundsException: arraycopy: last source index 16 out of bounds for byte[8]
+	at Cryptography.GeneratePinBlock (JavaAction : 'JA_GeneratePinblock')
 
-public class JA_GeneratePinblock extends CustomJavaAction<java.lang.String>
-{
-	private java.lang.String key;
-	private java.lang.String pin;
-	private java.lang.String pan;
+Advanced stacktrace:
+	at com.mendix.modules.microflowengine.MicroflowUtil.processException(MicroflowUtil.java:83)
 
-	public JA_GeneratePinblock(IContext context, java.lang.String key, java.lang.String pin, java.lang.String pan)
-	{
-		super(context);
-		this.key = key;
-		this.pin = pin;
-		this.pan = pan;
-	}
+Caused by: com.mendix.core.CoreRuntimeException: com.mendix.systemwideinterfaces.MendixRuntimeException: java.lang.ArrayIndexOutOfBoundsException: arraycopy: last source index 16 out of bounds for byte[8]
+	at com.mendix.basis.actionmanagement.ActionManager.executeSync(ActionManager.scala:110)
 
-	@java.lang.Override
-	public java.lang.String executeAction() throws Exception
-	{
-		// BEGIN USER CODE
+Caused by: com.mendix.systemwideinterfaces.MendixRuntimeException: java.lang.ArrayIndexOutOfBoundsException: arraycopy: last source index 16 out of bounds for byte[8]
+	at com.mendix.util.classloading.Runner$.withContextClassLoader(Runner.scala:23)
 
-        TripleDes d = new TripleDes(this.pan, 4);
-        String result = d.encrypt(key, pin);
-        return result;
-		// END USER CODE
-	}
-
-	/**
-	 * Returns a string representation of this action
-	 * @return a string representation of this action
-	 */
-	@java.lang.Override
-	public java.lang.String toString()
-	{
-		return "JA_GeneratePinblock";
-	}
-
-	// BEGIN EXTRA CODE
-    public class TripleDes  {
-
-        private  final String ALGORITHM = "TripleDES";
-        private  final String MODE = "ECB";
-        private  final String PADDING = "NoPadding";
-
-        /** algorithm/mode/padding */
-        private  final String TRANSFORMATION = ALGORITHM+"/"+MODE+"/"+PADDING;
-
-        private final String key;
-        private int pinLength;
-
-        public TripleDes(String key, int pinLength) {
-            this.key = key;
-            this.pinLength = pinLength;
-        }
-
-        public String encrypt(String pan, String pinClear) throws Exception {
-
-            if(pinClear.length() != pinLength) {
-                System.out.println("Incorrect PIN length given. Please fix! pinClear.size() " + "!= " + " pinLength : " + pinClear.length() + " !=" + pinLength);
-            }
-
-            String pinEncoded = encodePinBlockAsHex(pan, pinClear);
-            byte[] tmp = h2b(this.key);
-            byte[] key = new byte[24];
-            System.arraycopy(tmp, 0, key, 0, 16);
-            System.arraycopy(tmp, 0, key, 16, 8);
-            Cipher cipher = Cipher.getInstance(TRANSFORMATION);
-            cipher.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key, ALGORITHM));
-            byte[] plaintext = cipher.doFinal(h2b(pinEncoded));
-            return b2h(plaintext);
-        }
-
-        public String decrypt(String pan, String encryptedPin) throws Exception {
-            byte[] tmp = h2b(this.key);
-            byte[] key = new byte[24];
-            System.arraycopy(tmp, 0, key, 0, 16);
-            System.arraycopy(tmp, 0, key, 16, 8);
-            Cipher cipher = Cipher.getInstance(TRANSFORMATION);
-            cipher.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key, ALGORITHM));
-            byte[] plaintext = cipher.doFinal(h2b(encryptedPin));
-            String pinEncoded = b2h(plaintext);
-            return decodePinBlock(pan, pinEncoded);
-        }
-
-        public String decodePinBlock(String pan, String pinEncoded) throws Exception {
-            pan = pan.substring(pan.length() - 12 - 1, pan.length() - 1);
-            String paddingPAN = "0000".concat(pan);
-            byte[] pinBlock = xorBytes(h2b(paddingPAN), h2b(pinEncoded));
-            return b2h(pinBlock).substring(2, pinLength+2);
-        }
-
-        public String encodePinBlockAsHex(String pan, String pin) throws Exception {
-            pan = pan.substring(pan.length() - 12 - 1, pan.length() - 1);
-            String paddingPAN = "0000".concat(pan);
-
-            String Fs = "FFFFFFFFFFFFFFFF";
-            String paddingPIN = "0" + pin.length() + pin + Fs.substring(2 + pin.length(), Fs.length());
-
-            byte[] pinBlock = xorBytes(h2b(paddingPAN), h2b(paddingPIN));
-
-            return b2h(pinBlock);
-        }
-
-        private byte[] xorBytes(byte[] a, byte[] b) throws Exception {
-            if (a.length != b.length) {
-                throw new Exception();
-            }
-            byte[] result = new byte[a.length];
-            for (int i = 0; i < a.length; i++) {
-                int r = 0;
-                r = a[i] ^ b[i];
-                r &= 0xFF;
-                result[i] = (byte) r;
-            }
-            return result;
-        }
-
-        private byte[] h2b(String hex) {
-            if ((hex.length() & 0x01) == 0x01)
-                throw new IllegalArgumentException();
-            byte[] bytes = new byte[hex.length() / 2];
-            for (int idx = 0; idx < bytes.length; ++idx) {
-                int hi = Character.digit((int) hex.charAt(idx * 2), 16);
-                int lo = Character.digit((int) hex.charAt(idx * 2 + 1), 16);
-                if ((hi < 0) || (lo < 0))
-                    throw new IllegalArgumentException();
-                bytes[idx] = (byte) ((hi << 4) | lo);
-            }
-            return bytes;
-        }
-
-        private String b2h(byte[] bytes) {
-            char[] hex = new char[bytes.length * 2];
-            for (int idx = 0; idx < bytes.length; ++idx) {
-                int hi = (bytes[idx] & 0xF0) >>> 4;
-                int lo = (bytes[idx] & 0x0F);
-                hex[idx * 2] = (char) (hi < 10 ? '0' + hi : 'A' - 10 + hi);
-                hex[idx * 2 + 1] = (char) (lo < 10 ? '0' + lo : 'A' - 10 + lo);
-            }
-            return new String(hex);
-        }
-    }
-	// END EXTRA CODE
-}
+Caused by: java.lang.ArrayIndexOutOfBoundsException: arraycopy: last source index 16 out of bounds for byte[8]
+	at java.base/java.lang.System.arraycopy(Native Method)
+	at cryptography.actions.JA_GeneratePinblock$TripleDes.encrypt(JA_GeneratePinblock.java:84)
+	at cryptography.actions.JA_GeneratePinblock.executeAction(JA_GeneratePinblock.java:42)
+	at cryptography.actions.JA_GeneratePinblock.executeAction(JA_GeneratePinblock.java:22)
+	at com.mendix.systemwideinterfaces.core.UserAction.execute(UserAction.java:58)
+	at com.mendix.basis.actionmanagement.CoreActionHandlerImpl.doCall(CoreActionHandlerImpl.scala:71)
+	at com.mendix.basis.actionmanagement.CoreActionHandlerImpl.call(CoreActionHandlerImpl.scala:48)
+	at com.mendix.core.actionmanagement.internal.InternalCoreAction.call(InternalCoreAction.java:57)
+	at com.mendix.basis.actionmanagement.ActionManager.$anonfun$executeSync$2(ActionManager.scala:106)
+	at com.mendix.util.classloading.Runner$.withContextClassLoader(Runner.scala:20)
+	at com.mendix.basis.actionmanagement.ActionManager.executeSync(ActionManager.scala:105)
+	at com.mendix.basis.actionmanagement.UserActionCallBuilderImpl.execute(UserActionCallBuilderImpl.scala:59)
+	at com.mendix.modules.microflowengine.actions.actioncall.ForegroundJavaAction.doExecute(ForegroundJavaAction.scala:35)
+	at com.mendix.modules.microflowengine.actions.actioncall.ForegroundJavaAction.doExecute(ForegroundJavaAction.scala:11)
+	at com.mendix.modules.microflowengine.actions.actioncall.JavaAction.execute(JavaAction.scala:38)
+	at com.mendix.modules.microflowengine.microflow.impl.MicroflowObject.$anonfun$execute$1(MicroflowObject.scala:32)
+	at scala.Option.flatMap(Option.scala:283)
+	at com.mendix.modules.microflowengine.microflow.impl.MicroflowObject.execute(MicroflowObject.scala:29)
+	at com.mendix.modules.microflowengine.microflow.impl.MicroflowImpl.$anonfun$executeAfterBreakingIfNecessary$2(MicroflowImpl.scala:167)
+	at scala.Option.flatMap(Option.scala:283)
+	at com.mendix.modules.microflowengine.microflow.impl.MicroflowImpl.executeAfterBreakingIfNecessary(MicroflowImpl.scala:167)
+	at com.mendix.modules.microflowengine.microflow.impl.MicroflowImpl.executeAction(MicroflowImpl.scala:114)
+	at com.mendix.systemwideinterfaces.core.UserAction.execute(UserAction.java:58)
+	at com.mendix.basis.actionmanagement.CoreActionHandlerImpl.doCall(CoreActionHandlerImpl.scala:71)
+	at com.mendix.basis.actionmanagement.CoreActionHandlerImpl.call(CoreActionHandlerImpl.scala:48)
+	at com.mendix.core.actionmanagement.internal.InternalCoreAction.call(InternalCoreAction.java:57)
+	at com.mendix.basis.actionmanagement.ActionManager.$anonfun$executeSync$2(ActionManager.scala:106)
+	at com.mendix.util.classloading.Runner$.withContextClassLoader(Runner.scala:20)
+	at com.mendix.basis.actionmanagement.ActionManager.executeSync(ActionManager.scala:105)
+	at com.mendix.basis.actionmanagement.MicroflowCallBuilderImpl.execute(MicroflowCallBuilderImpl.scala:64)
+	at com.mendix.webui.actions.client.MicroflowRuntimeOperationExecutor.runMicroflow(MicroflowRuntimeOperationExecutor.scala:97)
+	at com.mendix.webui.actions.client.MicroflowRuntimeOperationExecutor.$anonfun$apply$5(MicroflowRuntimeOperationExecutor.scala:57)
+	at com.mendix.webui.actions.client.RegularClientAction$Helpers$.$anonfun$liftEither$1(RegularClientAction.scala:30)
+	at com.mendix.webui.actions.client.RegularClientAction$Helpers$StateHandler.$anonfun$apply$4(RegularClientAction.scala:56)
+	at com.mendix.webui.requesthandling.helpers.StateHandling.withState(StateHandling.scala:46)
+	at com.mendix.webui.requesthandling.helpers.StateHandling.withState$(StateHandling.scala:43)
+	at com.mendix.webui.actions.client.RegularClientAction$Helpers$StateHandler.withState(RegularClientAction.scala:46)
+	at com.mendix.webui.actions.client.RegularClientAction$Helpers$StateHandler.apply(RegularClientAction.scala:54)
+	at com.mendix.webui.actions.client.RegularClientAction$Helpers$StateHandler.apply(RegularClientAction.scala:46)
+	at com.mendix.webui.actions.client.MicroflowRuntimeOperationExecutor.apply(MicroflowRuntimeOperationExecutor.scala:58)
+	at com.mendix.webui.actions.client.RuntimeOperationAction.$anonfun$apply$1(RuntimeOperationAction.scala:57)
+	at scala.util.Either.flatMap(Either.scala:352)
+	at com.mendix.webui.actions.client.RuntimeOperationAction.apply(RuntimeOperationAction.scala:41)
+	at com.mendix.webui.actions.client.RuntimeOperationAction.apply(RuntimeOperationAction.scala:30)
+	at com.mendix.webui.actions.client.RegularClientAction$Helpers$.$anonfun$liftEither$1(RegularClientAction.scala:30)
+	at com.mendix.webui.actions.client.RegularClientAction.$anonfun$execute$3(RegularClientAction.scala:120)
+	at scala.util.Try$.apply(Try.scala:210)
+	at com.mendix.webui.actions.client.RegularClientAction.$anonfun$execute$2(RegularClientAction.scala:120)
+	at com.mendix.webui.actions.client.RegularClientAction.$anonfun$execute$2$adapted(RegularClientAction.scala:118)
+	at com.mendix.webui.requesthandling.helpers.ContextHandling.$anonfun$inContext$7(ContextHandling.scala:58)
+	at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+	at com.mendix.basis.actionmanagement.ActionMonitoring$.$anonfun$monitor$1(ActionMonitoring.scala:52)
+	at com.mendix.util.classloading.Runner$.withContextClassLoader(Runner.scala:20)
+	at com.mendix.basis.actionmanagement.ActionMonitoring$.monitor(ActionMonitoring.scala:52)
+	at com.mendix.webui.requesthandling.helpers.ContextHandling.inContext(ContextHandling.scala:58)
+	at com.mendix.webui.requesthandling.helpers.ContextHandling.inContext$(ContextHandling.scala:32)
+	at com.mendix.webui.actions.client.RegularClientAction.inContext(RegularClientAction.scala:94)
+	at com.mendix.webui.requesthandling.helpers.ContextHandling.inContext(ContextHandling.scala:29)
+	at com.mendix.webui.requesthandling.helpers.ContextHandling.inContext$(ContextHandling.scala:21)
+	at com.mendix.webui.actions.client.RegularClientAction.inContext(RegularClientAction.scala:94)
+	at com.mendix.webui.actions.client.RegularClientAction.$anonfun$execute$1(RegularClientAction.scala:118)
+	at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
+	at com.mendix.webui.requesthandling.helpers.ProfileHandling.profileRequest(ProfileHandling.scala:14)
+	at com.mendix.webui.requesthandling.helpers.ProfileHandling.profileRequest$(ProfileHandling.scala:10)
+	at com.mendix.webui.actions.client.RegularClientAction.profileRequest(RegularClientAction.scala:94)
+	at com.mendix.webui.actions.client.RegularClientAction.execute(RegularClientAction.scala:115)
+	at com.mendix.webui.requesthandling.ClientRequestHandler.handleAction(ClientRequestHandler.scala:105)
+	at com.mendix.webui.requesthandling.ClientRequestHandler.processRequest(ClientRequestHandler.scala:78)
+	at com.mendix.externalinterface.connector.RequestHandler.doProcessRequest(RequestHandler.java:37)
+	at com.mendix.external.connector.MxRuntimeConnector.$anonfun$processRequest$1(MxRuntimeConnector.scala:54)
+	at com.mendix.external.connector.MxRuntimeConnector.$anonfun$processRequest$1$adapted(MxRuntimeConnector.scala:54)
+	at com.mendix.util.classloading.Runner$.withContextClassLoader(Runner.scala:20)
+	at com.mendix.external.connector.MxRuntimeConnector.processRequest(MxRuntimeConnector.scala:54)
+	at com.mendix.basis.impl.MxRuntimeImpl.processRequest(MxRuntimeImpl.scala:231)
+	at com.mendix.m2ee.appcontainer.server.handler.RuntimeServlet.service(RuntimeServlet.scala:40)
+	at javax.servlet.http.HttpServlet.service(HttpServlet.java:590)
+	at org.eclipse.jetty.servlet.ServletHolder.handle(ServletHolder.java:764)
+	at org.eclipse.jetty.servlet.ServletHandler$ChainEnd.doFilter(ServletHandler.java:1665)
+	at org.eclipse.jetty.websocket.servlet.WebSocketUpgradeFilter.doFilter(WebSocketUpgradeFilter.java:170)
+	at org.eclipse.jetty.servlet.FilterHolder.doFilter(FilterHolder.java:202)
+	at org.eclipse.jetty.servlet.ServletHandler$Chain.doFilter(ServletHandler.java:1635)
+	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:527)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
+	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:1570)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
+	at org.eclipse.jetty.server.handler.ContextHandler.doHandle(ContextHandler.java:1384)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:176)
+	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:484)
+	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1543)
+	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:174)
+	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1306)
+	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:129)
+	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:122)
+	at org.eclipse.jetty.server.Server.handle(Server.java:563)
+	at org.eclipse.jetty.server.HttpChannel$RequestDispatchable.dispatch(HttpChannel.java:1598)
+	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:753)
+	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:501)
+	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:282)
+	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:314)
+	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:100)
+	at org.eclipse.jetty.io.SelectableChannelEndPoint$1.run(SelectableChannelEndPoint.java:53)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.runTask(AdaptiveExecutionStrategy.java:421)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.consumeTask(AdaptiveExecutionStrategy.java:390)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.tryProduce(AdaptiveExecutionStrategy.java:277)
+	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.run(AdaptiveExecutionStrategy.java:199)
+	at org.eclipse.jetty.util.thread.ReservedThreadExecutor$ReservedThread.run(ReservedThreadExecutor.java:411)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:969)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.doRunJob(QueuedThreadPool.java:1194)
+	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:1149)
+	at java.base/java.lang.Thread.run(Thread.java:829)
