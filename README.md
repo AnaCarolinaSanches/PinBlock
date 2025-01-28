@@ -1,50 +1,87 @@
-C:\Dev\Mendix\appmaisv2-feature_APP-445-encriptacao-app-runtime\javasource\cryptography\actions\JA_Criptografar.java:38: error: illegal start of expression
-		public RSAPublicKey getPublicKeyFromBase64(String base64PublicKey) throws Exception{
-		^
-C:\Dev\Mendix\appmaisv2-feature_APP-445-encriptacao-app-runtime\javasource\cryptography\actions\JA_Criptografar.java:58: error: illegal start of type
+package cryptography.actions;
+
+import com.mendix.systemwideinterfaces.core.IContext;
+import com.mendix.webui.CustomJavaAction;
+import java.security.*;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+
+public class JA_Criptografar extends CustomJavaAction<java.lang.String> {
+
+    private java.lang.String PublicKey;
+    private java.lang.String Value;
+
+    public JA_Criptografar(IContext context, java.lang.String PublicKey, java.lang.String Value) {
+        super(context);
+        this.PublicKey = PublicKey;
+        this.Value = Value;
+    }
+
+    // Método para converter a chave pública Base64 para RSAPublicKey
+    public RSAPublicKey getPublicKeyFromBase64(String base64PublicKey) throws Exception {
+        byte[] decodedPublicKey = Base64.getDecoder().decode(base64PublicKey);
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decodedPublicKey);
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        return (RSAPublicKey) keyFactory.generatePublic(keySpec);
+    }
+
+    // Método para validar o tamanho da chave pública
+    public void validateKeySize(RSAPublicKey publicKey) {
+        int keySize = publicKey.getModulus().bitLength();
+        if (keySize < 2048) {
+            throw new IllegalArgumentException("Key size must be at least 2048");
+        }
+    }
+
+    // Método para validar o valor de entrada
+    public void validateInputData(String value) {
+        if (value == null || value.isEmpty()) {
+            throw new IllegalArgumentException("Value cannot be null or empty");
+        }
+    }
+
+    @Override
+    public java.lang.String executeAction() throws Exception {
         try {
-        ^
-C:\Dev\Mendix\appmaisv2-feature_APP-445-encriptacao-app-runtime\javasource\cryptography\actions\JA_Criptografar.java:77: error: illegal start of type
+            // Valida e limpa a chave pública Base64
+            RSAPublicKey rsaPublicKey = getPublicKeyFromBase64(PublicKey);
+
+            // Valida o tamanho da chave pública (mínimo de 2048 bits)
+            validateKeySize(rsaPublicKey);
+
+            // Valida o valor a ser encriptado (não pode ser nulo ou vazio)
+            validateInputData(Value);
+
+            // Cria o objeto Cipher para encriptação
+            Cipher cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.ENCRYPT_MODE, rsaPublicKey);
+
+            // Encripta o valor
+            byte[] encryptedValue = cipher.doFinal(Value.getBytes());
+
+            // Codifica o valor encriptado em Base64 e retorna
+            return Base64.getEncoder().encodeToString(encryptedValue);
+
         } catch (IllegalArgumentException e) {
-          ^
-C:\Dev\Mendix\appmaisv2-feature_APP-445-encriptacao-app-runtime\javasource\cryptography\actions\JA_Criptografar.java:77: error: ';' expected
-        } catch (IllegalArgumentException e) {
-                                           ^
-C:\Dev\Mendix\appmaisv2-feature_APP-445-encriptacao-app-runtime\javasource\cryptography\actions\JA_Criptografar.java:79: error: illegal start of type
+            throw new IllegalArgumentException("Erro de validação: " + e.getMessage(), e);
         } catch (BadPaddingException | IllegalBlockSizeException e) {
-          ^
-C:\Dev\Mendix\appmaisv2-feature_APP-445-encriptacao-app-runtime\javasource\cryptography\actions\JA_Criptografar.java:79: error: <identifier> expected
-        } catch (BadPaddingException | IllegalBlockSizeException e) {
-                                    ^
-C:\Dev\Mendix\appmaisv2-feature_APP-445-encriptacao-app-runtime\javasource\cryptography\actions\JA_Criptografar.java:79: error: ';' expected
-        } catch (BadPaddingException | IllegalBlockSizeException e) {
-                                                                  ^
-C:\Dev\Mendix\appmaisv2-feature_APP-445-encriptacao-app-runtime\javasource\cryptography\actions\JA_Criptografar.java:81: error: illegal start of type
+            throw new Exception("Erro de encriptação: " + e.getMessage(), e);
         } catch (Exception e) {
-          ^
-C:\Dev\Mendix\appmaisv2-feature_APP-445-encriptacao-app-runtime\javasource\cryptography\actions\JA_Criptografar.java:81: error: ';' expected
-        } catch (Exception e) {
-                            ^
-C:\Dev\Mendix\appmaisv2-feature_APP-445-encriptacao-app-runtime\javasource\cryptography\actions\JA_Criptografar.java:92: error: class, interface, or enum expected
-	public java.lang.String toString()
-	       ^
-C:\Dev\Mendix\appmaisv2-feature_APP-445-encriptacao-app-runtime\javasource\cryptography\actions\JA_Criptografar.java:95: error: class, interface, or enum expected
-	}
-	^
-11 errors
+            throw new Exception("Erro inesperado: " + e.getMessage(), e);
+        }
+    }
 
-FAILURE: Build failed with an exception.
+    /**
+     * Retorna uma representação em string desta ação
+     * @return uma representação em string desta ação
+     */
+    @Override
+    public java.lang.String toString() {
+        return "JA_Criptografar";
+    }
 
-* What went wrong:
-Execution failed for task ':compile'.
-> Compilation failed; see the compiler error output for details.
-
-* Try:
-> Run with --stacktrace option to get the stack trace.
-> Run with --debug option to get more log output.
-> Run with --scan to get full insights.
-
-* Get more help at https://help.gradle.org
-
-BUILD FAILED in 12s
-
+}
