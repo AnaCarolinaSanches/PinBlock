@@ -1,127 +1,112 @@
-com.mendix.webui.WebUIException: Exception while executing runtime operation
-	at com.mendix.webui.actions.client.RuntimeOperationAction.$anonfun$apply$1(RuntimeOperationAction.scala:62)
+package cryptography.actions;
 
-Caused by: com.mendix.modules.microflowengine.MicroflowException: com.mendix.systemwideinterfaces.MendixRuntimeException: java.lang.IllegalArgumentException: Illegal base64 character 2d
-	at Cryptography.Microflow (JavaAction : 'JA_Criptografar')
+import com.mendix.systemwideinterfaces.core.IContext;
+import com.mendix.webui.CustomJavaAction;
+import java.security.*;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
+import javax.crypto.Cipher;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
 
-Advanced stacktrace:
-	at com.mendix.modules.microflowengine.MicroflowUtil.processException(MicroflowUtil.java:83)
+public class JA_Criptografar extends CustomJavaAction<java.lang.String>
+{
+    private java.lang.String PublicKey;
+    private java.lang.String Value;
 
-Caused by: com.mendix.core.CoreRuntimeException: com.mendix.systemwideinterfaces.MendixRuntimeException: java.lang.IllegalArgumentException: Illegal base64 character 2d
-	at com.mendix.basis.actionmanagement.ActionManager.executeSync(ActionManager.scala:110)
+    public JA_Criptografar(IContext context, java.lang.String PublicKey, java.lang.String Value)
+    {
+        super(context);
+        this.PublicKey = PublicKey;
+        this.Value = Value;
+    }
 
-Caused by: com.mendix.systemwideinterfaces.MendixRuntimeException: java.lang.IllegalArgumentException: Illegal base64 character 2d
-	at com.mendix.util.classloading.Runner$.withContextClassLoader(Runner.scala:23)
+    @java.lang.Override
+    public java.lang.String executeAction() throws Exception
+    {
+        try {
+            // Valida e limpa a chave pública Base64
+            RSAPublicKey rsaPublicKey = getPublicKeyFromBase64(PublicKey);
 
-Caused by: java.lang.IllegalArgumentException: Illegal base64 character 2d
-	at java.base/java.util.Base64$Decoder.decode0(Base64.java:746)
-	at java.base/java.util.Base64$Decoder.decode(Base64.java:538)
-	at java.base/java.util.Base64$Decoder.decode(Base64.java:561)
-	at cryptography.actions.JA_Criptografar.executeAction(JA_Criptografar.java:38)
-	at cryptography.actions.JA_Criptografar.executeAction(JA_Criptografar.java:21)
-	at com.mendix.systemwideinterfaces.core.UserAction.execute(UserAction.java:58)
-	at com.mendix.basis.actionmanagement.CoreActionHandlerImpl.doCall(CoreActionHandlerImpl.scala:71)
-	at com.mendix.basis.actionmanagement.CoreActionHandlerImpl.call(CoreActionHandlerImpl.scala:48)
-	at com.mendix.core.actionmanagement.internal.InternalCoreAction.call(InternalCoreAction.java:57)
-	at com.mendix.basis.actionmanagement.ActionManager.$anonfun$executeSync$2(ActionManager.scala:106)
-	at com.mendix.util.classloading.Runner$.withContextClassLoader(Runner.scala:20)
-	at com.mendix.basis.actionmanagement.ActionManager.executeSync(ActionManager.scala:105)
-	at com.mendix.basis.actionmanagement.UserActionCallBuilderImpl.execute(UserActionCallBuilderImpl.scala:59)
-	at com.mendix.modules.microflowengine.actions.actioncall.ForegroundJavaAction.doExecute(ForegroundJavaAction.scala:35)
-	at com.mendix.modules.microflowengine.actions.actioncall.ForegroundJavaAction.doExecute(ForegroundJavaAction.scala:11)
-	at com.mendix.modules.microflowengine.actions.actioncall.JavaAction.execute(JavaAction.scala:38)
-	at com.mendix.modules.microflowengine.microflow.impl.MicroflowObject.$anonfun$execute$1(MicroflowObject.scala:32)
-	at scala.Option.flatMap(Option.scala:283)
-	at com.mendix.modules.microflowengine.microflow.impl.MicroflowObject.execute(MicroflowObject.scala:29)
-	at com.mendix.modules.microflowengine.microflow.impl.MicroflowImpl.$anonfun$executeAfterBreakingIfNecessary$2(MicroflowImpl.scala:167)
-	at scala.Option.flatMap(Option.scala:283)
-	at com.mendix.modules.microflowengine.microflow.impl.MicroflowImpl.executeAfterBreakingIfNecessary(MicroflowImpl.scala:167)
-	at com.mendix.modules.microflowengine.microflow.impl.MicroflowImpl.executeAction(MicroflowImpl.scala:114)
-	at com.mendix.systemwideinterfaces.core.UserAction.execute(UserAction.java:58)
-	at com.mendix.basis.actionmanagement.CoreActionHandlerImpl.doCall(CoreActionHandlerImpl.scala:71)
-	at com.mendix.basis.actionmanagement.CoreActionHandlerImpl.call(CoreActionHandlerImpl.scala:48)
-	at com.mendix.core.actionmanagement.internal.InternalCoreAction.call(InternalCoreAction.java:57)
-	at com.mendix.basis.actionmanagement.ActionManager.$anonfun$executeSync$2(ActionManager.scala:106)
-	at com.mendix.util.classloading.Runner$.withContextClassLoader(Runner.scala:20)
-	at com.mendix.basis.actionmanagement.ActionManager.executeSync(ActionManager.scala:105)
-	at com.mendix.basis.actionmanagement.MicroflowCallBuilderImpl.execute(MicroflowCallBuilderImpl.scala:64)
-	at com.mendix.webui.actions.client.MicroflowRuntimeOperationExecutor.runMicroflow(MicroflowRuntimeOperationExecutor.scala:97)
-	at com.mendix.webui.actions.client.MicroflowRuntimeOperationExecutor.$anonfun$apply$5(MicroflowRuntimeOperationExecutor.scala:57)
-	at com.mendix.webui.actions.client.RegularClientAction$Helpers$.$anonfun$liftEither$1(RegularClientAction.scala:30)
-	at com.mendix.webui.actions.client.RegularClientAction$Helpers$StateHandler.$anonfun$apply$4(RegularClientAction.scala:56)
-	at com.mendix.webui.requesthandling.helpers.StateHandling.withState(StateHandling.scala:46)
-	at com.mendix.webui.requesthandling.helpers.StateHandling.withState$(StateHandling.scala:43)
-	at com.mendix.webui.actions.client.RegularClientAction$Helpers$StateHandler.withState(RegularClientAction.scala:46)
-	at com.mendix.webui.actions.client.RegularClientAction$Helpers$StateHandler.apply(RegularClientAction.scala:54)
-	at com.mendix.webui.actions.client.RegularClientAction$Helpers$StateHandler.apply(RegularClientAction.scala:46)
-	at com.mendix.webui.actions.client.MicroflowRuntimeOperationExecutor.apply(MicroflowRuntimeOperationExecutor.scala:58)
-	at com.mendix.webui.actions.client.RuntimeOperationAction.$anonfun$apply$1(RuntimeOperationAction.scala:57)
-	at scala.util.Either.flatMap(Either.scala:352)
-	at com.mendix.webui.actions.client.RuntimeOperationAction.apply(RuntimeOperationAction.scala:41)
-	at com.mendix.webui.actions.client.RuntimeOperationAction.apply(RuntimeOperationAction.scala:30)
-	at com.mendix.webui.actions.client.RegularClientAction$Helpers$.$anonfun$liftEither$1(RegularClientAction.scala:30)
-	at com.mendix.webui.actions.client.RegularClientAction.$anonfun$execute$3(RegularClientAction.scala:120)
-	at scala.util.Try$.apply(Try.scala:210)
-	at com.mendix.webui.actions.client.RegularClientAction.$anonfun$execute$2(RegularClientAction.scala:120)
-	at com.mendix.webui.actions.client.RegularClientAction.$anonfun$execute$2$adapted(RegularClientAction.scala:118)
-	at com.mendix.webui.requesthandling.helpers.ContextHandling.$anonfun$inContext$7(ContextHandling.scala:58)
-	at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
-	at com.mendix.basis.actionmanagement.ActionMonitoring$.$anonfun$monitor$1(ActionMonitoring.scala:52)
-	at com.mendix.util.classloading.Runner$.withContextClassLoader(Runner.scala:20)
-	at com.mendix.basis.actionmanagement.ActionMonitoring$.monitor(ActionMonitoring.scala:52)
-	at com.mendix.webui.requesthandling.helpers.ContextHandling.inContext(ContextHandling.scala:58)
-	at com.mendix.webui.requesthandling.helpers.ContextHandling.inContext$(ContextHandling.scala:32)
-	at com.mendix.webui.actions.client.RegularClientAction.inContext(RegularClientAction.scala:94)
-	at com.mendix.webui.requesthandling.helpers.ContextHandling.inContext(ContextHandling.scala:29)
-	at com.mendix.webui.requesthandling.helpers.ContextHandling.inContext$(ContextHandling.scala:21)
-	at com.mendix.webui.actions.client.RegularClientAction.inContext(RegularClientAction.scala:94)
-	at com.mendix.webui.actions.client.RegularClientAction.$anonfun$execute$1(RegularClientAction.scala:118)
-	at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
-	at com.mendix.webui.requesthandling.helpers.ProfileHandling.profileRequest(ProfileHandling.scala:14)
-	at com.mendix.webui.requesthandling.helpers.ProfileHandling.profileRequest$(ProfileHandling.scala:10)
-	at com.mendix.webui.actions.client.RegularClientAction.profileRequest(RegularClientAction.scala:94)
-	at com.mendix.webui.actions.client.RegularClientAction.execute(RegularClientAction.scala:115)
-	at com.mendix.webui.requesthandling.ClientRequestHandler.handleAction(ClientRequestHandler.scala:105)
-	at com.mendix.webui.requesthandling.ClientRequestHandler.processRequest(ClientRequestHandler.scala:78)
-	at com.mendix.externalinterface.connector.RequestHandler.doProcessRequest(RequestHandler.java:37)
-	at com.mendix.external.connector.MxRuntimeConnector.$anonfun$processRequest$1(MxRuntimeConnector.scala:54)
-	at com.mendix.external.connector.MxRuntimeConnector.$anonfun$processRequest$1$adapted(MxRuntimeConnector.scala:54)
-	at com.mendix.util.classloading.Runner$.withContextClassLoader(Runner.scala:20)
-	at com.mendix.external.connector.MxRuntimeConnector.processRequest(MxRuntimeConnector.scala:54)
-	at com.mendix.basis.impl.MxRuntimeImpl.processRequest(MxRuntimeImpl.scala:231)
-	at com.mendix.m2ee.appcontainer.server.handler.RuntimeServlet.service(RuntimeServlet.scala:40)
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:590)
-	at org.eclipse.jetty.servlet.ServletHolder.handle(ServletHolder.java:764)
-	at org.eclipse.jetty.servlet.ServletHandler$ChainEnd.doFilter(ServletHandler.java:1665)
-	at org.eclipse.jetty.websocket.servlet.WebSocketUpgradeFilter.doFilter(WebSocketUpgradeFilter.java:170)
-	at org.eclipse.jetty.servlet.FilterHolder.doFilter(FilterHolder.java:202)
-	at org.eclipse.jetty.servlet.ServletHandler$Chain.doFilter(ServletHandler.java:1635)
-	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:527)
-	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
-	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:1570)
-	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
-	at org.eclipse.jetty.server.handler.ContextHandler.doHandle(ContextHandler.java:1384)
-	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:176)
-	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:484)
-	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1543)
-	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:174)
-	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1306)
-	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:129)
-	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:122)
-	at org.eclipse.jetty.server.Server.handle(Server.java:563)
-	at org.eclipse.jetty.server.HttpChannel$RequestDispatchable.dispatch(HttpChannel.java:1598)
-	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:753)
-	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:501)
-	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:282)
-	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:314)
-	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:100)
-	at org.eclipse.jetty.io.SelectableChannelEndPoint$1.run(SelectableChannelEndPoint.java:53)
-	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.runTask(AdaptiveExecutionStrategy.java:421)
-	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.consumeTask(AdaptiveExecutionStrategy.java:390)
-	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.tryProduce(AdaptiveExecutionStrategy.java:277)
-	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.run(AdaptiveExecutionStrategy.java:199)
-	at org.eclipse.jetty.util.thread.ReservedThreadExecutor$ReservedThread.run(ReservedThreadExecutor.java:411)
-	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:969)
-	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.doRunJob(QueuedThreadPool.java:1194)
-	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:1149)
-	at java.base/java.lang.Thread.run(Thread.java:829)
+            // Valida o tamanho da chave pública (mínimo de 2048 bits)
+            validateKeySize(rsaPublicKey);
+
+            // Valida o valor a ser encriptado (não pode ser nulo ou vazio)
+            validateInputData(Value);
+
+            // Cria o objeto Cipher para encriptação
+            Cipher cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.ENCRYPT_MODE, rsaPublicKey);
+
+            // Encripta o valor
+            byte[] encryptedValue = cipher.doFinal(Value.getBytes());
+
+            // Codifica o valor encriptado em Base64 e retorna
+            return Base64.getEncoder().encodeToString(encryptedValue);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Erro de validação: " + e.getMessage(), e);
+        } catch (BadPaddingException | IllegalBlockSizeException e) {
+            throw new Exception("Erro de encriptação: " + e.getMessage(), e);
+        } catch (Exception e) {
+            throw new Exception("Erro inesperado: " + e.getMessage(), e);
+        }
+    }
+
+    // Método para validar e limpar a chave pública em Base64
+    public static String validateAndCleanBase64PublicKey(String publicKey) throws IllegalArgumentException {
+        // Remove cabeçalhos e rodapés do formato PEM
+        publicKey = publicKey.replace("-----BEGIN PUBLIC KEY-----", "").replace("-----END PUBLIC KEY-----", "");
+
+        // Remove qualquer espaço em branco extra (incluindo novas linhas) para garantir que seja uma chave Base64 válida
+        publicKey = publicKey.replaceAll("\\s+", "");
+
+        // Verifica se a chave tem o comprimento correto
+        if (publicKey.length() % 4 != 0) {
+            throw new IllegalArgumentException("A chave pública Base64 tem um comprimento inválido.");
+        }
+
+        // Verifica se a chave contém apenas caracteres válidos Base64
+        if (!publicKey.matches("^[A-Za-z0-9+/=]*$")) {
+            throw new IllegalArgumentException("A chave pública Base64 contém caracteres inválidos.");
+        }
+
+        // Retorna a chave limpa e validada
+        return publicKey;
+    }
+
+    // Método para converter a chave pública Base64 para RSAPublicKey
+    public static RSAPublicKey getPublicKeyFromBase64(String base64PublicKey) throws Exception {
+        // Valida e limpa a chave pública
+        base64PublicKey = validateAndCleanBase64PublicKey(base64PublicKey);
+
+        // Decodifica a chave pública Base64
+        byte[] decodedKey = Base64.getDecoder().decode(base64PublicKey);
+
+        // Converte o array de bytes para uma chave pública RSA
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decodedKey);
+        
+        return (RSAPublicKey) keyFactory.generatePublic(keySpec);
+    }
+
+    // Método para validar o tamanho da chave pública (mínimo 2048 bits)
+    public static void validateKeySize(RSAPublicKey publicKey) throws IllegalArgumentException {
+        // Verifica se o tamanho da chave pública é de pelo menos 2048 bits
+        if (publicKey.getModulus().bitLength() < 2048) {
+            throw new IllegalArgumentException("A chave pública RSA deve ter pelo menos 2048 bits.");
+        }
+    }
+
+    // Método para validar se o valor a ser encriptado não é nulo ou vazio
+    public static void validateInputData(String value) throws IllegalArgumentException {
+        if (value == null || value.isEmpty()) {
+            throw new IllegalArgumentException("O valor a ser encriptado não pode ser nulo ou vazio.");
+        }
+    }
+
+    // Retorna uma string representando a ação
+    @java.lang.Override
+    public java.lang.String toString() {
+        return "JA_Criptografar";
+    }
+}
