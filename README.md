@@ -11,7 +11,6 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 
 public class JA_Criptografar extends CustomJavaAction<java.lang.String> {
-
     private java.lang.String PublicKey;
     private java.lang.String Value;
 
@@ -21,6 +20,7 @@ public class JA_Criptografar extends CustomJavaAction<java.lang.String> {
         this.Value = Value;
     }
 
+    // BEGIN USER CODE
     // Método para converter a chave pública Base64 para RSAPublicKey
     public RSAPublicKey getPublicKeyFromBase64(String base64PublicKey) throws Exception {
         byte[] decodedPublicKey = Base64.getDecoder().decode(base64PublicKey);
@@ -46,6 +46,7 @@ public class JA_Criptografar extends CustomJavaAction<java.lang.String> {
 
     @Override
     public java.lang.String executeAction() throws Exception {
+        // BEGIN USER CODE
         try {
             // Valida e limpa a chave pública Base64
             RSAPublicKey rsaPublicKey = getPublicKeyFromBase64(PublicKey);
@@ -73,15 +74,17 @@ public class JA_Criptografar extends CustomJavaAction<java.lang.String> {
         } catch (Exception e) {
             throw new Exception("Erro inesperado: " + e.getMessage(), e);
         }
+        // END USER CODE
     }
 
     /**
-     * Retorna uma representação em string desta ação
-     * @return uma representação em string desta ação
+     * Returns a string representation of this action
+     * @return a string representation of this action
      */
     @Override
     public java.lang.String toString() {
         return "JA_Criptografar";
     }
-
+    // BEGIN EXTRA CODE
+    // END EXTRA CODE
 }
