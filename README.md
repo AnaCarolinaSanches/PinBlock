@@ -20,33 +20,32 @@ public class JA_Criptografar extends CustomJavaAction<java.lang.String> {
         this.Value = Value;
     }
 
-    // BEGIN USER CODE
-    // Método para converter a chave pública Base64 para RSAPublicKey
-    public RSAPublicKey getPublicKeyFromBase64(String base64PublicKey) throws Exception {
-        byte[] decodedPublicKey = Base64.getDecoder().decode(base64PublicKey);
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decodedPublicKey);
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        return (RSAPublicKey) keyFactory.generatePublic(keySpec);
-    }
-
-    // Método para validar o tamanho da chave pública
-    public void validateKeySize(RSAPublicKey publicKey) {
-        int keySize = publicKey.getModulus().bitLength();
-        if (keySize < 2048) {
-            throw new IllegalArgumentException("Key size must be at least 2048");
-        }
-    }
-
-    // Método para validar o valor de entrada
-    public void validateInputData(String value) {
-        if (value == null || value.isEmpty()) {
-            throw new IllegalArgumentException("Value cannot be null or empty");
-        }
-    }
-
     @Override
     public java.lang.String executeAction() throws Exception {
         // BEGIN USER CODE
+        // Método para converter a chave pública Base64 para RSAPublicKey
+        public RSAPublicKey getPublicKeyFromBase64(String base64PublicKey) throws Exception {
+            byte[] decodedPublicKey = Base64.getDecoder().decode(base64PublicKey);
+            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decodedPublicKey);
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            return (RSAPublicKey) keyFactory.generatePublic(keySpec);
+        }
+
+        // Método para validar o tamanho da chave pública
+        public void validateKeySize(RSAPublicKey publicKey) {
+            int keySize = publicKey.getModulus().bitLength();
+            if (keySize < 2048) {
+                throw new IllegalArgumentException("Key size must be at least 2048");
+            }
+        }
+
+        // Método para validar o valor de entrada
+        public void validateInputData(String value) {
+            if (value == null || value.isEmpty()) {
+                throw new IllegalArgumentException("Value cannot be null or empty");
+            }
+        }
+
         try {
             // Valida e limpa a chave pública Base64
             RSAPublicKey rsaPublicKey = getPublicKeyFromBase64(PublicKey);
