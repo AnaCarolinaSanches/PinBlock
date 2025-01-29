@@ -1,33 +1,28 @@
-package cryptography.actions;
-
-import java.security.KeyFactory;
-import java.security.interfaces.RSAPublicKey;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
-
-public class CryptographyRSA {
-
-    // Método para obter a chave pública a partir de uma string Base64
-    public static RSAPublicKey getPublicKeyFromBase64(String base64PublicKey) throws Exception {
-        byte[] decodedPublicKey = Base64.getDecoder().decode(base64PublicKey);
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decodedPublicKey);
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        return (RSAPublicKey) keyFactory.generatePublic(keySpec);
-    }
-
-    // Valida o tamanho da chave pública
-    public static void validateKeySize(RSAPublicKey publicKey) {
-        int keySize = publicKey.getModulus().bitLength();
-        if (keySize < 2048) {
-            throw new IllegalArgumentException("Key size must be at least 2048");
-        }
-    }
-
-    // Valida os dados de entrada
-    public static void validateInputData(String value) {
-        if (value == null || value.isEmpty()) {
-            throw new IllegalArgumentException("Value cannot be null or empty");
-        }
-    }
+@java.lang.Override
+public java.lang.String executeAction() throws Exception
+{
+    // BEGIN USER CODE
+    
+    // Remover cabeçalho e rodapé da chave pública PEM
+    String publicKeyPEM = PublicKey.replace("-----BEGIN PUBLIC KEY-----", "").replace("-----END PUBLIC KEY-----", "");
+    
+    // Decodificar a chave pública de Base64
+    byte[] decodedPublicKey = Base64.getDecoder().decode(publicKeyPEM);
+    
+    // Gerar chave pública RSA
+    X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decodedPublicKey);
+    KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+    java.security.PublicKey publicKey = keyFactory.generatePublic(keySpec);
+    
+    // Inicializar o cipher para criptografar
+    Cipher cipher = Cipher.getInstance("RSA");
+    cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+    
+    // Criptografar o valor
+    byte[] encryptedValue = cipher.doFinal(Value.getBytes());
+    
+    // Retornar a criptografia em Base64
+    return Base64.getEncoder().encodeToString(encryptedValue);
+    
+    // END USER CODE
 }
-
