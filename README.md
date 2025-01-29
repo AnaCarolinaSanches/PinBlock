@@ -36,4 +36,23 @@ public class JA_Criptografar extends CustomJavaAction<java.lang.String>
         cipher.init(Cipher.ENCRYPT_MODE, publicKey);
         
         // Criptografar o valor
-        byte[] encryptedValue = cipher.doFinal(Value.getBytes(Sta
+        byte[] encryptedValue = cipher.doFinal(Value.getBytes(StandardCharsets.UTF_8));
+        
+        // Retornar a criptografia em Base64
+        return Base64.getEncoder().encodeToString(encryptedValue);
+        // END USER CODE
+    }
+
+    /**
+     * Returns a string representation of this action
+     * @return a string representation of this action
+     */
+    @java.lang.Override
+    public java.lang.String toString()
+    {
+        return "JA_Criptografar";
+    }
+
+    // BEGIN EXTRA CODE
+    // END EXTRA CODE
+}
