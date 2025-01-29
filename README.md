@@ -1,3 +1,11 @@
 String publicKeyPEM = PublicKey.replace("-----BEGIN PUBLIC KEY-----", "")
-                                      .replace("-----END PUBLIC KEY-----", "")
-                                      .replaceAll("\\s+", "");  // Remove todos os espaços e quebras de linha
+                                      .replace("-----END PUBLIC KEY-----", "");
+
+        // Remover espaços e quebras de linha manualmente
+        StringBuilder cleanedPublicKey = new StringBuilder();
+        for (int i = 0; i < publicKeyPEM.length(); i++) {
+            char c = publicKeyPEM.charAt(i);
+            if (!Character.isWhitespace(c)) {
+                cleanedPublicKey.append(c);
+            }
+        }
