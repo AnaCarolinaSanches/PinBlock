@@ -23,6 +23,7 @@ public class JA_Criptografar extends CustomJavaAction<java.lang.String>
     @java.lang.Override
     public java.lang.String executeAction() throws Exception
     {
+        // BEGIN USER CODE
         // Limpar e decodificar a chave pública
         String cleanedPublicKey = CryptographyHelper.cleanPublicKey(PublicKey);
         byte[] decodedPublicKey = Base64.getDecoder().decode(cleanedPublicKey);
@@ -35,15 +36,4 @@ public class JA_Criptografar extends CustomJavaAction<java.lang.String>
         cipher.init(Cipher.ENCRYPT_MODE, publicKey);
         
         // Criptografar o valor
-        byte[] encryptedValue = cipher.doFinal(Value.getBytes(StandardCharsets.UTF_8));
-        
-        // Retornar a criptografia em Base64
-        return Base64.getEncoder().encodeToString(encryptedValue);
-    }
-
-    @java.lang.Override
-    public java.lang.String toString()
-    {
-        return "JA_Criptografar";
-    }
-}
+        byte[] encryptedValue = cipher.doFinal(Value.getBytes(Sta
