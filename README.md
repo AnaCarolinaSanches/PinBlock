@@ -1,74 +1,16 @@
-package cryptography.actions;
+com.mendix.webui.WebUIException: Exception while executing runtime operation
+	at com.mendix.webui.actions.client.RuntimeOperationAction.$anonfun$apply$1(RuntimeOperationAction.scala:62)
 
-import com.mendix.systemwideinterfaces.core.IContext;
-import com.mendix.webui.CustomJavaAction;
-import java.security.KeyFactory;
-import java.security.PrivateKey;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.util.Base64;
-import javax.crypto.Cipher;
-import java.nio.charset.StandardCharsets;
+Caused by: com.mendix.modules.microflowengine.MicroflowException: com.mendix.systemwideinterfaces.MendixRuntimeException: javax.crypto.BadPaddingException: Padding error in decryption
+	at Cryptography.Microflow (JavaAction : 'JA_Descriptografar')
 
-public class JA_Descriptografar extends CustomJavaAction<java.lang.String>
-{
-    private java.lang.String PrivateKey;
-    private java.lang.String EncryptedValue;
+Advanced stacktrace:
+	at com.mendix.modules.microflowengine.MicroflowUtil.processException(MicroflowUtil.java:83)
 
-    public JA_Descriptografar(IContext context, java.lang.String PrivateKey, java.lang.String EncryptedValue)
-    {
-        super(context);
-        this.PrivateKey = PrivateKey;
-        this.EncryptedValue = EncryptedValue;
-    }
+Caused by: com.mendix.core.CoreRuntimeException: com.mendix.systemwideinterfaces.MendixRuntimeException: javax.crypto.BadPaddingException: Padding error in decryption
+	at com.mendix.basis.actionmanagement.ActionManager.executeSync(ActionManager.scala:110)
 
-    @java.lang.Override
-    public java.lang.String executeAction() throws Exception
-    {
-        // BEGIN USER CODE
+Caused by: com.mendix.systemwideinterfaces.MendixRuntimeException: javax.crypto.BadPaddingException: Padding error in decryption
+	at com.mendix.util.classloading.Runner$.withContextClassLoader(Runner.scala:23)
 
-        // Remove PEM header and footer from the private key
-        String privateKeyPEM = PrivateKey
-            .replace("-----BEGIN PRIVATE KEY-----", "")
-            .replace("-----END PRIVATE KEY-----", "");
-
-        // Remove all whitespace (including new lines)
-        privateKeyPEM = privateKeyPEM.replaceAll("\\s+", "");
-
-        // Decode the private key from Base64
-        byte[] decodedPrivateKey = Base64.getDecoder().decode(privateKeyPEM);
-
-        // Generate RSA private key
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(decodedPrivateKey);
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        RSAPrivateKey privateKey = (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
-
-        // Initialize Cipher for RSA decryption (PKCS#1 padding)
-        Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-        cipher.init(Cipher.DECRYPT_MODE, privateKey);
-
-        // Decode the encrypted value from Base64
-        byte[] encryptedValueBytes = Base64.getDecoder().decode(EncryptedValue);
-
-        // Decrypt the value
-        byte[] decryptedValue = cipher.doFinal(encryptedValueBytes);
-
-        // Return the decrypted value as a String
-        return new String(decryptedValue, StandardCharsets.UTF_8);
-
-        // END USER CODE
-    }
-
-    /**
-     * Returns a string representation of this action
-     * @return a string representation of this action
-     */
-    @java.lang.Override
-    public java.lang.String toString()
-    {
-        return "JA_Descriptografar";
-    }
-
-    // BEGIN EXTRA CODE
-    // END EXTRA CODE
-}
+Caused by: javax.crypto.BadPaddingException: Padding error in decryption
