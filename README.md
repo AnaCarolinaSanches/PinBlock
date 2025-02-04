@@ -1,24 +1,15 @@
-C:\Dev\Mendix\appmaisv2-feature_APP-445-encriptacao-app-runtime\javasource\cryptography\actions\JA_Descriptografar.java:40: error: cannot find symbol
-		boolean keysMatch = RSAKeyValidator.doKeysMatch(PrivateKey, PublicKey);
-		                                                            ^
-  symbol:   variable PublicKey
-  location: class JA_Descriptografar
-Note: Some input files use or override a deprecated API.
-Note: Recompile with -Xlint:deprecation for details.
-1 error
+	at Cryptography.Microflow (JavaAction : 'JA_Descriptografar')
 
-FAILURE: Build failed with an exception.
+Advanced stacktrace:
+	at com.mendix.modules.microflowengine.MicroflowUtil.processException(MicroflowUtil.java:83)
 
-* What went wrong:
-Execution failed for task ':compile'.
-> Compilation failed; see the compiler error output for details.
+Caused by: com.mendix.core.CoreRuntimeException: com.mendix.systemwideinterfaces.MendixRuntimeException: java.lang.IllegalArgumentException: Illegal base64 character 2d
+	at com.mendix.basis.actionmanagement.ActionManager.executeSync(ActionManager.scala:110)
 
-* Try:
-> Run with --stacktrace option to get the stack trace.
-> Run with --debug option to get more log output.
-> Run with --scan to get full insights.
+Caused by: com.mendix.systemwideinterfaces.MendixRuntimeException: java.lang.IllegalArgumentException: Illegal base64 character 2d
+	at com.mendix.util.classloading.Runner$.withContextClassLoader(Runner.scala:23)
 
-* Get more help at https://help.gradle.org
-
-BUILD FAILED in 22s
-
+Caused by: java.lang.IllegalArgumentException: Illegal base64 character 2d
+	at java.base/java.util.Base64$Decoder.decode0(Base64.java:746)
+	at java.base/java.util.Base64$Decoder.decode(Base64.java:538)
+	at java.base/java.util.Base64$Decoder.decode(Base64.java:561)
