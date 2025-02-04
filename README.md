@@ -1,4 +1,4 @@
-C:\Dev\Mendix\appmaisv2-feature_APP-445-encriptacao-app-runtime\javasource\cryptography\actions\JA_Descriptografar.java:39: error: cannot find symbol
+C:\Dev\Mendix\appmaisv2-feature_APP-445-encriptacao-app-runtime\javasource\cryptography\actions\JA_Descriptografar.java:40: error: cannot find symbol
 		boolean keysMatch = RSAKeyValidator.doKeysMatch(PrivateKey, PublicKey);
 		                                                            ^
   symbol:   variable PublicKey
@@ -20,5 +20,5 @@ Execution failed for task ':compile'.
 
 * Get more help at https://help.gradle.org
 
-BUILD FAILED in 28s
+BUILD FAILED in 22s
 
