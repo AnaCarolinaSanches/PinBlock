@@ -1,41 +1,24 @@
-package cryptography.actions;
+C:\Dev\Mendix\appmaisv2-feature_APP-445-encriptacao-app-runtime\javasource\cryptography\actions\JA_Descriptografar.java:39: error: cannot find symbol
+		boolean keysMatch = RSAKeyValidator.doKeysMatch(PrivateKey, PublicKey);
+		                                                            ^
+  symbol:   variable PublicKey
+  location: class JA_Descriptografar
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+1 error
 
-import java.security.KeyFactory;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
-import java.util.Base64;
+FAILURE: Build failed with an exception.
 
-public class RSAKeyValidator {
+* What went wrong:
+Execution failed for task ':compile'.
+> Compilation failed; see the compiler error output for details.
 
-    public static boolean doKeysMatch(String privateKeyPEM, String publicKeyPEM) throws Exception {
-        // Remover apenas espaços em branco extras dentro das chaves
-        String privateKeyContent = privateKeyPEM.replaceAll("\\s+", "");
-        String publicKeyContent = publicKeyPEM.replaceAll("\\s+", "");
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --debug option to get more log output.
+> Run with --scan to get full insights.
 
-        // Remover cabeçalhos e rodapés da chave privada para a decodificação
-        String privateKeyContentClean = privateKeyContent
-                .replace("-----BEGIN PRIVATE KEY-----", "")
-                .replace("-----END PRIVATE KEY-----", "");
+* Get more help at https://help.gradle.org
 
-        // Remover cabeçalhos e rodapés da chave pública para a decodificação
-        String publicKeyContentClean = publicKeyContent
-                .replace("-----BEGIN PUBLIC KEY-----", "")
-                .replace("-----END PUBLIC KEY-----", "");
+BUILD FAILED in 28s
 
-        byte[] decodedPrivateKey = Base64.getDecoder().decode(privateKeyContentClean);
-        byte[] decodedPublicKey = Base64.getDecoder().decode(publicKeyContentClean);
-
-        // Gerar as chaves com os dados decodificados
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(decodedPrivateKey);
-        RSAPrivateKey privateKey = (RSAPrivateKey) keyFactory.generatePrivate(privateKeySpec);
-
-        X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(decodedPublicKey);
-        RSAPublicKey publicKey = (RSAPublicKey) keyFactory.generatePublic(publicKeySpec);
-
-        // Verificar se os moduli das chaves privadas e públicas são iguais
-        return privateKey.getModulus().equals(publicKey.getModulus());
-    }
-}
