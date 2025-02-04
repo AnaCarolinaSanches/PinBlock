@@ -1,62 +1,41 @@
 package cryptography.actions;
 
-import com.mendix.systemwideinterfaces.core.IContext;
-import com.mendix.webui.CustomJavaAction;
 import java.security.KeyFactory;
 import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
-import javax.crypto.Cipher;
-import java.nio.charset.StandardCharsets;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
-public class JA_Descriptografar extends CustomJavaAction<String>
-{
-    private String PrivateKey;
-    private String PublicKey;
-    private String EncryptedValue;
+public class RSAKeyValidator {
 
-    public JA_Descriptografar(IContext context, String PrivateKey, String PublicKey, String EncryptedValue)
-    {
-        super(context);
-        this.PrivateKey = PrivateKey;
-        this.PublicKey = PublicKey;
-        this.EncryptedValue = EncryptedValue;
-    }
+    public static boolean doKeysMatch(String privateKeyPEM, String publicKeyPEM) throws Exception {
+        // Remover apenas espaços em branco extras dentro das chaves
+        String privateKeyContent = privateKeyPEM.replaceAll("\\s+", "");
+        String publicKeyContent = publicKeyPEM.replaceAll("\\s+", "");
 
-    @Override
-    public String executeAction() throws Exception
-    {
-        // Validar se a chave privada corresponde à chave pública
-        boolean keysMatch = RSAKeyValidator.doKeysMatch(PrivateKey, PublicKey);
-        if (!keysMatch) {
-            throw new Exception("As chaves fornecidas não correspondem.");
-        }
-
-        // Descriptografar o valor
-        String privateKeyPEM = PrivateKey
+        // Remover cabeçalhos e rodapés da chave privada para a decodificação
+        String privateKeyContentClean = privateKeyContent
                 .replace("-----BEGIN PRIVATE KEY-----", "")
                 .replace("-----END PRIVATE KEY-----", "");
-        
-        privateKeyPEM = privateKeyPEM.replaceAll("\\s+", ""); // Remover espaços extras
-        
-        byte[] decodedPrivateKey = Base64.getDecoder().decode(privateKeyPEM);
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(decodedPrivateKey);
+
+        // Remover cabeçalhos e rodapés da chave pública para a decodificação
+        String publicKeyContentClean = publicKeyContent
+                .replace("-----BEGIN PUBLIC KEY-----", "")
+                .replace("-----END PUBLIC KEY-----", "");
+
+        byte[] decodedPrivateKey = Base64.getDecoder().decode(privateKeyContentClean);
+        byte[] decodedPublicKey = Base64.getDecoder().decode(publicKeyContentClean);
+
+        // Gerar as chaves com os dados decodificados
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        RSAPrivateKey privateKey = (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
+        PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(decodedPrivateKey);
+        RSAPrivateKey privateKey = (RSAPrivateKey) keyFactory.generatePrivate(privateKeySpec);
 
-        // Inicializando o Cipher para a descriptografia RSA
-        Cipher cipher = Cipher.getInstance("RSA/ECB/OAEPWithSHA-1AndMGF1Padding");
-        cipher.init(Cipher.DECRYPT_MODE, privateKey);
+        X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(decodedPublicKey);
+        RSAPublicKey publicKey = (RSAPublicKey) keyFactory.generatePublic(publicKeySpec);
 
-        byte[] encryptedValueBytes = Base64.getDecoder().decode(EncryptedValue);
-        byte[] decryptedValue = cipher.doFinal(encryptedValueBytes);
-
-        return new String(decryptedValue, StandardCharsets.UTF_8);
-    }
-
-    @Override
-    public String toString()
-    {
-        return "JA_Descriptografar";
+        // Verificar se os moduli das chaves privadas e públicas são iguais
+        return privateKey.getModulus().equals(publicKey.getModulus());
     }
 }
