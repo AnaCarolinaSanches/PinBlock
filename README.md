@@ -1,128 +1,47 @@
-com.mendix.webui.WebUIException: Exception while executing runtime operation
-	at com.mendix.webui.actions.client.RuntimeOperationAction.$anonfun$apply$1(RuntimeOperationAction.scala:62)
-
-Caused by: com.mendix.modules.microflowengine.MicroflowException: com.mendix.systemwideinterfaces.MendixRuntimeException: javax.crypto.IllegalBlockSizeException: Data must not be longer than 117 bytes
-	at API_SSO.CRS_Token_Password (JavaAction : 'JA_RSA_Encrypt')
-
-Advanced stacktrace:
-	at com.mendix.modules.microflowengine.MicroflowUtil.processException(MicroflowUtil.java:83)
-
-Caused by: com.mendix.core.CoreRuntimeException: com.mendix.systemwideinterfaces.MendixRuntimeException: javax.crypto.IllegalBlockSizeException: Data must not be longer than 117 bytes
-	at com.mendix.basis.actionmanagement.ActionManager.executeSync(ActionManager.scala:110)
-
-Caused by: com.mendix.systemwideinterfaces.MendixRuntimeException: javax.crypto.IllegalBlockSizeException: Data must not be longer than 117 bytes
-	at com.mendix.util.classloading.Runner$.withContextClassLoader(Runner.scala:23)
-
-Caused by: javax.crypto.IllegalBlockSizeException: Data must not be longer than 117 bytes
-	at java.base/com.sun.crypto.provider.RSACipher.doFinal(RSACipher.java:350)
-	at java.base/com.sun.crypto.provider.RSACipher.engineDoFinal(RSACipher.java:424)
-	at java.base/javax.crypto.Cipher.doFinal(Cipher.java:2202)
-	at cryptography.actions.CryptographyRSA.encrypt(CryptographyRSA.java:22)
-	at cryptography.actions.JA_RSA_Encrypt.executeAction(JA_RSA_Encrypt.java:38)
-	at cryptography.actions.JA_RSA_Encrypt.executeAction(JA_RSA_Encrypt.java:21)
-	at com.mendix.systemwideinterfaces.core.UserAction.execute(UserAction.java:58)
-	at com.mendix.basis.actionmanagement.CoreActionHandlerImpl.doCall(CoreActionHandlerImpl.scala:71)
-	at com.mendix.basis.actionmanagement.CoreActionHandlerImpl.call(CoreActionHandlerImpl.scala:48)
-	at com.mendix.core.actionmanagement.internal.InternalCoreAction.call(InternalCoreAction.java:57)
-	at com.mendix.basis.actionmanagement.ActionManager.$anonfun$executeSync$2(ActionManager.scala:106)
-	at com.mendix.util.classloading.Runner$.withContextClassLoader(Runner.scala:20)
-	at com.mendix.basis.actionmanagement.ActionManager.executeSync(ActionManager.scala:105)
-	at com.mendix.basis.actionmanagement.UserActionCallBuilderImpl.execute(UserActionCallBuilderImpl.scala:59)
-	at com.mendix.modules.microflowengine.actions.actioncall.ForegroundJavaAction.doExecute(ForegroundJavaAction.scala:35)
-	at com.mendix.modules.microflowengine.actions.actioncall.ForegroundJavaAction.doExecute(ForegroundJavaAction.scala:11)
-	at com.mendix.modules.microflowengine.actions.actioncall.JavaAction.execute(JavaAction.scala:38)
-	at com.mendix.modules.microflowengine.microflow.impl.MicroflowObject.$anonfun$execute$1(MicroflowObject.scala:32)
-	at scala.Option.flatMap(Option.scala:283)
-	at com.mendix.modules.microflowengine.microflow.impl.MicroflowObject.execute(MicroflowObject.scala:29)
-	at com.mendix.modules.microflowengine.microflow.impl.MicroflowImpl.$anonfun$executeAfterBreakingIfNecessary$2(MicroflowImpl.scala:167)
-	at scala.Option.flatMap(Option.scala:283)
-	at com.mendix.modules.microflowengine.microflow.impl.MicroflowImpl.executeAfterBreakingIfNecessary(MicroflowImpl.scala:167)
-	at com.mendix.modules.microflowengine.microflow.impl.MicroflowImpl.executeAction(MicroflowImpl.scala:114)
-	at com.mendix.systemwideinterfaces.core.UserAction.execute(UserAction.java:58)
-	at com.mendix.basis.actionmanagement.CoreActionHandlerImpl.doCall(CoreActionHandlerImpl.scala:71)
-	at com.mendix.basis.actionmanagement.CoreActionHandlerImpl.call(CoreActionHandlerImpl.scala:48)
-	at com.mendix.core.actionmanagement.internal.InternalCoreAction.call(InternalCoreAction.java:57)
-	at com.mendix.basis.actionmanagement.ActionManager.$anonfun$executeSync$2(ActionManager.scala:106)
-	at com.mendix.util.classloading.Runner$.withContextClassLoader(Runner.scala:20)
-	at com.mendix.basis.actionmanagement.ActionManager.executeSync(ActionManager.scala:105)
-	at com.mendix.basis.actionmanagement.MicroflowCallBuilderImpl.execute(MicroflowCallBuilderImpl.scala:64)
-	at com.mendix.webui.actions.client.MicroflowRuntimeOperationExecutor.runMicroflow(MicroflowRuntimeOperationExecutor.scala:97)
-	at com.mendix.webui.actions.client.MicroflowRuntimeOperationExecutor.$anonfun$apply$5(MicroflowRuntimeOperationExecutor.scala:57)
-	at com.mendix.webui.actions.client.RegularClientAction$Helpers$.$anonfun$liftEither$1(RegularClientAction.scala:30)
-	at com.mendix.webui.actions.client.RegularClientAction$Helpers$StateHandler.$anonfun$apply$4(RegularClientAction.scala:56)
-	at com.mendix.webui.requesthandling.helpers.StateHandling.withState(StateHandling.scala:46)
-	at com.mendix.webui.requesthandling.helpers.StateHandling.withState$(StateHandling.scala:43)
-	at com.mendix.webui.actions.client.RegularClientAction$Helpers$StateHandler.withState(RegularClientAction.scala:46)
-	at com.mendix.webui.actions.client.RegularClientAction$Helpers$StateHandler.apply(RegularClientAction.scala:54)
-	at com.mendix.webui.actions.client.RegularClientAction$Helpers$StateHandler.apply(RegularClientAction.scala:46)
-	at com.mendix.webui.actions.client.MicroflowRuntimeOperationExecutor.apply(MicroflowRuntimeOperationExecutor.scala:58)
-	at com.mendix.webui.actions.client.RuntimeOperationAction.$anonfun$apply$1(RuntimeOperationAction.scala:57)
-	at scala.util.Either.flatMap(Either.scala:352)
-	at com.mendix.webui.actions.client.RuntimeOperationAction.apply(RuntimeOperationAction.scala:41)
-	at com.mendix.webui.actions.client.RuntimeOperationAction.apply(RuntimeOperationAction.scala:30)
-	at com.mendix.webui.actions.client.RegularClientAction$Helpers$.$anonfun$liftEither$1(RegularClientAction.scala:30)
-	at com.mendix.webui.actions.client.RegularClientAction.$anonfun$execute$3(RegularClientAction.scala:120)
-	at scala.util.Try$.apply(Try.scala:210)
-	at com.mendix.webui.actions.client.RegularClientAction.$anonfun$execute$2(RegularClientAction.scala:120)
-	at com.mendix.webui.actions.client.RegularClientAction.$anonfun$execute$2$adapted(RegularClientAction.scala:118)
-	at com.mendix.webui.requesthandling.helpers.ContextHandling.$anonfun$inContext$7(ContextHandling.scala:58)
-	at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
-	at com.mendix.basis.actionmanagement.ActionMonitoring$.$anonfun$monitor$1(ActionMonitoring.scala:52)
-	at com.mendix.util.classloading.Runner$.withContextClassLoader(Runner.scala:20)
-	at com.mendix.basis.actionmanagement.ActionMonitoring$.monitor(ActionMonitoring.scala:52)
-	at com.mendix.webui.requesthandling.helpers.ContextHandling.inContext(ContextHandling.scala:58)
-	at com.mendix.webui.requesthandling.helpers.ContextHandling.inContext$(ContextHandling.scala:32)
-	at com.mendix.webui.actions.client.RegularClientAction.inContext(RegularClientAction.scala:94)
-	at com.mendix.webui.requesthandling.helpers.ContextHandling.inContext(ContextHandling.scala:29)
-	at com.mendix.webui.requesthandling.helpers.ContextHandling.inContext$(ContextHandling.scala:21)
-	at com.mendix.webui.actions.client.RegularClientAction.inContext(RegularClientAction.scala:94)
-	at com.mendix.webui.actions.client.RegularClientAction.$anonfun$execute$1(RegularClientAction.scala:118)
-	at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.scala:18)
-	at com.mendix.webui.requesthandling.helpers.ProfileHandling.profileRequest(ProfileHandling.scala:14)
-	at com.mendix.webui.requesthandling.helpers.ProfileHandling.profileRequest$(ProfileHandling.scala:10)
-	at com.mendix.webui.actions.client.RegularClientAction.profileRequest(RegularClientAction.scala:94)
-	at com.mendix.webui.actions.client.RegularClientAction.execute(RegularClientAction.scala:115)
-	at com.mendix.webui.requesthandling.ClientRequestHandler.handleAction(ClientRequestHandler.scala:105)
-	at com.mendix.webui.requesthandling.ClientRequestHandler.processRequest(ClientRequestHandler.scala:78)
-	at com.mendix.externalinterface.connector.RequestHandler.doProcessRequest(RequestHandler.java:37)
-	at com.mendix.external.connector.MxRuntimeConnector.$anonfun$processRequest$1(MxRuntimeConnector.scala:54)
-	at com.mendix.external.connector.MxRuntimeConnector.$anonfun$processRequest$1$adapted(MxRuntimeConnector.scala:54)
-	at com.mendix.util.classloading.Runner$.withContextClassLoader(Runner.scala:20)
-	at com.mendix.external.connector.MxRuntimeConnector.processRequest(MxRuntimeConnector.scala:54)
-	at com.mendix.basis.impl.MxRuntimeImpl.processRequest(MxRuntimeImpl.scala:231)
-	at com.mendix.m2ee.appcontainer.server.handler.RuntimeServlet.service(RuntimeServlet.scala:40)
-	at javax.servlet.http.HttpServlet.service(HttpServlet.java:590)
-	at org.eclipse.jetty.servlet.ServletHolder.handle(ServletHolder.java:764)
-	at org.eclipse.jetty.servlet.ServletHandler$ChainEnd.doFilter(ServletHandler.java:1665)
-	at org.eclipse.jetty.websocket.servlet.WebSocketUpgradeFilter.doFilter(WebSocketUpgradeFilter.java:170)
-	at org.eclipse.jetty.servlet.FilterHolder.doFilter(FilterHolder.java:202)
-	at org.eclipse.jetty.servlet.ServletHandler$Chain.doFilter(ServletHandler.java:1635)
-	at org.eclipse.jetty.servlet.ServletHandler.doHandle(ServletHandler.java:527)
-	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
-	at org.eclipse.jetty.server.session.SessionHandler.doHandle(SessionHandler.java:1570)
-	at org.eclipse.jetty.server.handler.ScopedHandler.nextHandle(ScopedHandler.java:221)
-	at org.eclipse.jetty.server.handler.ContextHandler.doHandle(ContextHandler.java:1384)
-	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:176)
-	at org.eclipse.jetty.servlet.ServletHandler.doScope(ServletHandler.java:484)
-	at org.eclipse.jetty.server.session.SessionHandler.doScope(SessionHandler.java:1543)
-	at org.eclipse.jetty.server.handler.ScopedHandler.nextScope(ScopedHandler.java:174)
-	at org.eclipse.jetty.server.handler.ContextHandler.doScope(ContextHandler.java:1306)
-	at org.eclipse.jetty.server.handler.ScopedHandler.handle(ScopedHandler.java:129)
-	at org.eclipse.jetty.server.handler.HandlerWrapper.handle(HandlerWrapper.java:122)
-	at org.eclipse.jetty.server.Server.handle(Server.java:563)
-	at org.eclipse.jetty.server.HttpChannel$RequestDispatchable.dispatch(HttpChannel.java:1598)
-	at org.eclipse.jetty.server.HttpChannel.dispatch(HttpChannel.java:753)
-	at org.eclipse.jetty.server.HttpChannel.handle(HttpChannel.java:501)
-	at org.eclipse.jetty.server.HttpConnection.onFillable(HttpConnection.java:282)
-	at org.eclipse.jetty.io.AbstractConnection$ReadCallback.succeeded(AbstractConnection.java:314)
-	at org.eclipse.jetty.io.FillInterest.fillable(FillInterest.java:100)
-	at org.eclipse.jetty.io.SelectableChannelEndPoint$1.run(SelectableChannelEndPoint.java:53)
-	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.runTask(AdaptiveExecutionStrategy.java:421)
-	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.consumeTask(AdaptiveExecutionStrategy.java:390)
-	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.tryProduce(AdaptiveExecutionStrategy.java:277)
-	at org.eclipse.jetty.util.thread.strategy.AdaptiveExecutionStrategy.run(AdaptiveExecutionStrategy.java:199)
-	at org.eclipse.jetty.util.thread.ReservedThreadExecutor$ReservedThread.run(ReservedThreadExecutor.java:411)
-	at org.eclipse.jetty.util.thread.QueuedThreadPool.runJob(QueuedThreadPool.java:969)
-	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.doRunJob(QueuedThreadPool.java:1194)
-	at org.eclipse.jetty.util.thread.QueuedThreadPool$Runner.run(QueuedThreadPool.java:1149)
-	at java.base/java.lang.Thread.run(Thread.java:829)
+LibGit2Sharp.NotFoundException: No valid git object identified by 'refs/remotes/origin/feature/APP-439-tela-de-cancelamento-iof' exists in the repository.
+   at LibGit2Sharp.Core.Ensure.GitObjectIsNotNull(GitObject gitObject, String identifier) in /_/LibGit2Sharp/Core/Ensure.cs:line 265
+   at LibGit2Sharp.RepositoryExtensions.SingleCommittish(Repository repo, Object identifier) in /_/LibGit2Sharp/RepositoryExtensions.cs:line 288
+   at LibGit2Sharp.RepositoryExtensions.Committishes(Repository repo, Object identifier, Boolean throwIfNotFound)+MoveNext() in /_/LibGit2Sharp/RepositoryExtensions.cs:line 310
+   at LibGit2Sharp.RepositoryExtensions.Committishes(Repository repo, Object identifier, Boolean throwIfNotFound)+MoveNext() in /_/LibGit2Sharp/RepositoryExtensions.cs:line 322
+   at System.Linq.Enumerable.TakeWhileIterator[TSource](IEnumerable`1 source, Func`2 predicate)+MoveNext()
+   at LibGit2Sharp.CommitLog.CommitEnumerator.InternalHidePush(IList`1 identifier, HidePushSignature hidePush) in /_/LibGit2Sharp/CommitLog.cs:line 176
+   at LibGit2Sharp.CommitLog.CommitEnumerator.Push(IList`1 identifier) in /_/LibGit2Sharp/CommitLog.cs:line 184
+   at LibGit2Sharp.CommitLog.CommitEnumerator..ctor(Repository repo, CommitFilter filter) in /_/LibGit2Sharp/CommitLog.cs:line 121
+   at LibGit2Sharp.CommitLog.GetEnumerator() in /_/LibGit2Sharp/CommitLog.cs:line 54
+   at System.Linq.Enumerable.Contains[TSource](IEnumerable`1 source, TSource value, IEqualityComparer`1 comparer)
+   at Mendix.Modeler.VersionControl.Actions.GitFetchAction.<>c__DisplayClass8_0.<GetNonPushedCommitNotes>b__0(Commit c) in Mendix.Modeler.VersionControl\Actions\Git\GitFetchAction.cs:line 49
+   at System.Linq.Enumerable.TryGetFirst[TSource](IEnumerable`1 source, Func`2 predicate, Boolean& found)
+   at Mendix.Modeler.VersionControl.Actions.GitFetchAction.GetNonPushedCommitNotes(Repository repo) in Mendix.Modeler.VersionControl\Actions\Git\GitFetchAction.cs:line 49
+   at Mendix.Modeler.VersionControl.Actions.GitFetchAction.Execute(Repository repo) in Mendix.Modeler.VersionControl\Actions\Git\GitFetchAction.cs:line 86
+   at Mendix.Modeler.VersionControl.Operations.Git.GitCheckVersionOperation.Execute(VersionCheckRequest request) in Mendix.Modeler.VersionControl\Operations\Git\GitCheckVersionOperation.cs:line 34
+   at Mendix.Modeler.VersionControl.UpdateWorker.CheckVersion(ICheckConflictState state, IRemoteRepository remoteRepository, IRevLine branchLine, Revision revision, Boolean oneRevisionEarlier, String revisionDescription) in Mendix.Modeler.VersionControl\Update\UpdateWorker.cs:line 53
+   at Mendix.Modeler.VersionControl.Updater.<>c__DisplayClass20_0.<AddCheckVersionStep>b__0(IProgressInfo _) in Mendix.Modeler.VersionControl\Update\Updater.cs:line 198
+   at Mendix.Modeler.VersionControl.Updater.<>c__DisplayClass29_0.<AddProcessStep>b__0(IProgressInfo info) in Mendix.Modeler.VersionControl\Update\Updater.cs:line 308
+   at Mendix.Modeler.Utility.Progress.StepBase`1.Run(TProgressInfo info) in Mendix.Modeler.Utility\Progress\Step.cs:line 31
+   at Mendix.Modeler.Utility.Progress.StepBase`1.Mendix.Modeler.Utility.Progress.IStep.Run(Object progressInfo) in Mendix.Modeler.Utility\Progress\Step.cs:line 36
+   at Mendix.Modeler.UIFramework.Progress.ProcessRunner.RunStep(IStep step) in Mendix.Modeler.UIFramework\Progress\ProcessRunner.cs:line 167
+   at Mendix.Modeler.UIFramework.Progress.ProcessRunner.OnDoWork(Object sender, DoWorkEventArgs e) in Mendix.Modeler.UIFramework\Progress\ProcessRunner.cs:line 81
+   at System.ComponentModel.BackgroundWorker.OnDoWork(DoWorkEventArgs e)
+   at System.ComponentModel.BackgroundWorker.WorkerThreadStart(Object argument)
+--- End of stack trace from previous location ---
+   at Mendix.Modeler.UIFramework.Progress.ProcessRunner.Run() in Mendix.Modeler.UIFramework\Progress\ProcessRunner.cs:line 57
+   at Mendix.Modeler.VersionControl.Updater.LaunchUpdateProcess(RevUpdateState state) in Mendix.Modeler.VersionControl\Update\Updater.cs:line 151
+   at Mendix.Modeler.VersionControl.Updater.Update(RevUpdateState state) in Mendix.Modeler.VersionControl\Update\Updater.cs:line 81
+   at Mendix.Modeler.VersionControl.UpdaterUI.Update(IProject project, RevOperationSource source) in Mendix.Modeler.VersionControl.View\Update\UpdaterUI.cs:line 68
+   at Mendix.Modeler.ProjectHandling.View.Commands.VersionControl.UpdateCommand.Call(IFeatureCommandContext context) in Mendix.Modeler.ProjectHandling.View\Commands\VersionControl\UpdateCommand.cs:line 25
+   at Mendix.Modeler.Core.Commands.FeatureCommand.Execute(IFeatureCommandContext context) in Mendix.Modeler.Core\Commands\FeatureCommand.cs:line 88
+   at Mendix.Modeler.MainWindow.Menus.VersionControlMenuItemsProvider.<>c__DisplayClass4_0.<MakeCommandHandler>b__0() in Mendix.Modeler.ProjectHandling.View\Menus\VersionControlMenuItemsProvider.cs:line 56
+   at Mendix.Modeler.Core.View.Menus.MainMenu.<>c__DisplayClass13_0.<CreateButtonMenuItem>b__0(Object _, EventArgs _) in Mendix.Modeler.Core.View.CrossPlatform\Menus\MainMenu.cs:line 135
+   at Eto.Forms.Command.OnExecuted(EventArgs e)
+   at Eto.Forms.Command.Execute()
+   at Eto.Forms.Command.System.Windows.Input.ICommand.Execute(Object parameter)
+   at Eto.PropertyStore.CommandWrapper.Command_Execute(Object sender, EventArgs e)
+   at Eto.Forms.MenuItem.OnClick(EventArgs e)
+   at Eto.Forms.MenuItem.Callback.OnClick(MenuItem widget, EventArgs e)
+   at Eto.Wpf.Forms.Menu.MenuItemHandler`3.OnClick()
+   at Eto.Wpf.Forms.Menu.MenuItemHandler`3.<Initialize>b__1_0(Object sender, RoutedEventArgs e)
+   at System.Windows.EventRoute.InvokeHandlersImpl(Object source, RoutedEventArgs args, Boolean reRaised)
+   at System.Windows.UIElement.RaiseEventImpl(DependencyObject sender, RoutedEventArgs args)
+   at System.Windows.Controls.MenuItem.InvokeClickAfterRender(Object arg)
+   at System.Windows.Threading.ExceptionWrapper.InternalRealCall(Delegate callback, Object args, Int32 numArgs)
+   at System.Windows.Threading.ExceptionWrapper.TryCatchWhen(Object source, Delegate callback, Object args, Int32 numArgs, Delegate catchHandler)
