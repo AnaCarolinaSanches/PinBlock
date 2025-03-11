@@ -1,22 +1,24 @@
-No que consiste a Política KYS?
+Na venda fraudulenta de imóveis:
+
 
 
 
 a.
-Consiste em ações e procedimentos para se conhecer os parceiros governamentais das instituições financeiras, para que possa ser conferido o melhor tratamento a tais clientes
+Os imóveis são comprados com recursos de origem ilícita, por valores oficialmente menores que os valores efetivamente pagos. A diferença entre o valor da transação e o valor declarado oficialmente é paga com dinheiro em espécie. Na sequência, a propriedade é vendida pelo valor de mercado e o lucro aparentemente gerado é utilizado para justificar a origem do dinheiro.
 
 
 
 b.
-A Política consiste em procedimentos para conhecer os clientes da instituição, categorizando todos os clientes de acordo com o nível de serviço e risco oferecido à instituição financeira.
+Os imóveis são comprados com recursos de origem lícita ou ilícita, por valores oficialmente menores que os valores efetivamente pagos e na sequência o bem é vendido pelo mesmo valor.
 
 
 
 c.
-A Política consiste na descrição de etapas e medidas para conhecer os fornecedores da instituição financeira para então mitigar o risco de contratação com fornecedores que praticam atos de não conformidade 
+Os imóveis são comprados com recursos de origem ilícita ou lícita, por valores maiores que os de mercado. Na sequência, a propriedade é vendida pelo valor de mercado simulando um prejuízo.
+
+ 
 
 
 
 d.
-A Política consiste em procedimentos para conhecer os parceiros de negócios de bancos, especialmente parceiros internacionais. 
-
+Os imóveis são comprados com recursos de origem lícita, por valores oficialmente menores que os valores efetivamente pagos. A diferença entre o valor da transação e o valor declarado oficialmente é paga com dinheiro em espécie. Na sequência, a propriedade é vendida pelo valor de mercado e o lucro aparentemente gerado é utilizado para justificar a origem do dinheiro.
