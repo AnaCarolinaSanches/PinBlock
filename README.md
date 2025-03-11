@@ -1,19 +1,23 @@
-Em relação ao financiamento ao terrorismo, indique a alternativa correta:
+Sobre o que se trata a Carta Circular 4001? 
+
+
 
 
 a.
-O financiamento ao terrorismo é a transferência de fundos de qualquer natureza para pessoas ou grupos que praticam atos de terrorismo. 
+Trata sobre as operações que podem configurar indícios de crime de LDFTP e que são passiveis de comunicação ao COAF
+
 
 
 b.
-O financiamento ao terrorismo é a transferência de fundos apenas de natureza ilícita para pessoas ou grupos que praticam atos de terrorismo. 
+Trata sobre o escopo de atuação do BACEN
+
 
 
 c.
-O financiamento ao terrorismo é a transferência de fundos apenas de natureza lícita para pessoas ou grupos que praticam atos de terrorismo. 
+Trata sobre o rol de pessoas que podem ser consideradas “PEPs”
+
 
 
 d.
-O financiamento ao terrorismo é a transferência de fundos entre os próprios grupos terroristas, obtidos apenas de forma ilícita, para pessoas ou grupos que irão praticar atos de terrorismo. 
+Trata sobre as regras para bancos internacionais se tornarem correspondentes bancários
 
- 
