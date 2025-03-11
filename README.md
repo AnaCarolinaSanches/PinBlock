@@ -1,21 +1,19 @@
-Indique a alternativa correta:
+Em relação ao financiamento ao terrorismo, indique a alternativa correta:
 
 
 a.
-Na lavagem de dinheiro a motivação é econômica, o agente atua da forma mais discreta possível para não levantar suspeita, a origem do dinheiro é ilícita e ele usará o dinheiro para uma finalidade lícita ou ilícita.
-
+O financiamento ao terrorismo é a transferência de fundos de qualquer natureza para pessoas ou grupos que praticam atos de terrorismo. 
 
 
 b.
-Na lavagem de dinheiro a motivação é ideológica, o agente irá atuar com a publicidade doa atos, a origem do dinheiro é lícita e ele usará o dinheiro para uma finalidade ilícita.
-
+O financiamento ao terrorismo é a transferência de fundos apenas de natureza ilícita para pessoas ou grupos que praticam atos de terrorismo. 
 
 
 c.
-Na lavagem de dinheiro a motivação é econômica, o agente atua da forma mais discreta possível para não levantar suspeita, a origem do dinheiro é ilícita ou lícita e ele usará o dinheiro sempre para uma finalidade ilícita.
-
+O financiamento ao terrorismo é a transferência de fundos apenas de natureza lícita para pessoas ou grupos que praticam atos de terrorismo. 
 
 
 d.
-Na lavagem de dinheiro a motivação é econômica e política, o agente atua da forma mais discreta possível para não levantar suspeita, a origem do dinheiro é ilícita e ele usará o dinheiro sempre para uma finalidade lícita.
+O financiamento ao terrorismo é a transferência de fundos entre os próprios grupos terroristas, obtidos apenas de forma ilícita, para pessoas ou grupos que irão praticar atos de terrorismo. 
 
+ 
