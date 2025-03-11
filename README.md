@@ -1,23 +1,18 @@
-Sobre o que se trata a Carta Circular 4001? 
-
+Dentre as alternativas abaixo, indique aquela que NÃO traz uma atividade que poderia ser considerada suspeita no que diz respeito à lavagem de dinheiro.
 
 
 
 a.
-Trata sobre as operações que podem configurar indícios de crime de LDFTP e que são passiveis de comunicação ao COAF
-
+Entrada de receitas em valores compatíveis com a atividade exercida.
 
 
 b.
-Trata sobre o escopo de atuação do BACEN
-
+Entrada de receitas em valores discrepantes em relação à atividade exercida.
 
 
 c.
-Trata sobre o rol de pessoas que podem ser consideradas “PEPs”
-
+Venda ou compra de ouro incompatível com o patrimônio, a atividade econômica ou a ocupação profissional e a capacidade financeira do cliente.
 
 
 d.
-Trata sobre as regras para bancos internacionais se tornarem correspondentes bancários
-
+Fragmentação de depósitos bancários.
