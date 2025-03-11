@@ -1,23 +1,21 @@
-Selecione a alternativa que indica corretamente um dos tratamentos que devemos ter com PEPs. 
-
-
+Indique a alternativa correta:
 
 
 a.
-Analisar a compatibilidade financeira declarada com a movimentação de seus recursos
+Na lavagem de dinheiro a motivação é econômica, o agente atua da forma mais discreta possível para não levantar suspeita, a origem do dinheiro é ilícita e ele usará o dinheiro para uma finalidade lícita ou ilícita.
 
 
 
 b.
-Analisar se os PEPs possuem certificação junto com o GAFI
+Na lavagem de dinheiro a motivação é ideológica, o agente irá atuar com a publicidade doa atos, a origem do dinheiro é lícita e ele usará o dinheiro para uma finalidade ilícita.
 
 
 
 c.
-Analisar se os PEPs possuem autorização internacional para serem clientes de instituições financeiras
+Na lavagem de dinheiro a motivação é econômica, o agente atua da forma mais discreta possível para não levantar suspeita, a origem do dinheiro é ilícita ou lícita e ele usará o dinheiro sempre para uma finalidade ilícita.
 
 
 
 d.
-Analisar se os PEPs possuem certificação junto ao BACEN e CVM 
+Na lavagem de dinheiro a motivação é econômica e política, o agente atua da forma mais discreta possível para não levantar suspeita, a origem do dinheiro é ilícita e ele usará o dinheiro sempre para uma finalidade lícita.
 
