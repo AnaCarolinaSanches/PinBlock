@@ -1,22 +1,17 @@
-Qual informação importante a Circular 3978 traz sobre procedimentos KYC?
+Qual é a circular do Bacen que traz as operações e situações que podem configurar os indícios do crime de lavagem de dinheiro e financiamento ao terrorismo (situações passíveis de comunicação ao COAF)?
 
-
-Questão 2Resposta
 
 a.
-A Circular estabelece que os procedimentos de KYC devem ser revistos periodicamente.
-
+Carta Circular 7894
 
 
 b.
-A Circular estabelece que os procedimentos de KYC devem ser suspensos em caso de identificação de PEP
-
+Carta Circular 4569
 
 
 c.
-A Circular estabelece que os procedimentos de KYC devem ser comunicados ao COAF 
-
+Carta Circular 4001
 
 
 d.
-A Circular estabelece que os procedimentos de KYC devem ser monitorados pelo BACEN e na sua ausência, pela CVM
+Carta Circular 2365
